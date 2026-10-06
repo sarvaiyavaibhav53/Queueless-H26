@@ -1,0 +1,54 @@
+{
+    "dataset_name": "QueueLess Full Synthetic Dataset",
+    "dataset_type": "synthetic_discrete_event_queue_simulation",
+    "status": "FROZEN",
+    "row_count": 195838,
+    "column_count": 22,
+    "columns": [
+        "event_id",
+        "office_id",
+        "service_id",
+        "arrival_time",
+        "date",
+        "hour",
+        "day_of_week",
+        "is_weekend",
+        "people_ahead",
+        "queue_length",
+        "active_counters",
+        "arrival_rate_15m",
+        "counter_load",
+        "historical_avg_service_minutes",
+        "service_time_std",
+        "no_show_rate",
+        "no_show",
+        "cancelled",
+        "service_start_time",
+        "service_end_time",
+        "actual_service_minutes",
+        "actual_wait_minutes"
+    ],
+    "offices": [
+        "STV",
+        "RJT",
+        "AMD"
+    ],
+    "services": [
+        "DL_RENEWAL",
+        "LL",
+        "VEH_REG"
+    ],
+    "date_range": [
+        "2023-01-02 09:01:07",
+        "2024-05-24 16:58:25"
+    ],
+    "random_seed": 42,
+    "simulation_days": 365,
+    "source_csv": "queue_events_full.csv",
+    "source_parquet": "queue_events_full.parquet",
+    "source_metadata": "generation_metadata.json",
+    "frozen_csv": "queue_events_full.csv",
+    "frozen_parquet": "queue_events_full.parquet",
+    "creation_timestamp": "2026-10-03 16:43:14.315609",
+    "description": "This dataset is synthetic and generated using the QueueLess discrete-event queue simulator. It is not real government operational data."
+}

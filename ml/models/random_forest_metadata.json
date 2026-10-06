@@ -1,0 +1,44 @@
+{
+    "model_type": "RandomForestRegressor with Pipeline",
+    "target": "actual_wait_minutes",
+    "feature_list": [
+        "office_id",
+        "service_id",
+        "hour",
+        "day_of_week",
+        "people_ahead",
+        "queue_length",
+        "active_counters",
+        "arrival_rate_15m",
+        "counter_load",
+        "historical_avg_service_minutes",
+        "service_time_std",
+        "no_show_rate"
+    ],
+    "best_hyperparameters": {
+        "n_estimators": 300,
+        "max_depth": null,
+        "min_samples_leaf": 4,
+        "max_features": "sqrt"
+    },
+    "training_rows": 153687,
+    "validation_rows": 27121,
+    "test_rows": 27122,
+    "baseline_metrics": {
+        "test_mae": 9.4442,
+        "test_rmse": 14.5253,
+        "test_r2": 0.7772
+    },
+    "random_forest_metrics": {
+        "test_mae": 3.9566356489437347,
+        "test_rmse": 5.994780921770432,
+        "test_r2": 0.9620516781287116
+    },
+    "training_date": "2026-10-03",
+    "random_seed": 42,
+    "preprocessing_method": "OneHotEncoder for categorical, passthrough for numerical",
+    "baseline_test_mae": 9.4442,
+    "random_forest_test_mae": 3.9566356489437347,
+    "mae_improvement": 5.487564351056266,
+    "mae_improvement_percentage": 58.10512643798591
+}

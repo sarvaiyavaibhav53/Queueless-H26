@@ -1,0 +1,67 @@
+simulation:
+  random_seed: 42
+  test:
+    days_to_simulate: 5
+  full:
+    days_to_simulate: 365
+    target_events_approx: 200000
+
+working_hours:
+  start: 9
+  end: 17
+
+offices:
+  RJT:
+    counters: 3
+    demand_multiplier: 1.0
+  AMD:
+    counters: 5
+    demand_multiplier: 1.4
+  STV:
+    counters: 4
+    demand_multiplier: 1.2
+
+services:
+  LL:
+    mean_minutes: 7.0
+    std_minutes: 2.0
+  DL_RENEWAL:
+    mean_minutes: 9.0
+    std_minutes: 3.0
+  VEH_REG:
+    mean_minutes: 15.0
+    std_minutes: 5.0
+
+arrivals:
+  base_daily_citizens_per_service: 50
+  hourly_weights:
+    9: 0.8
+    10: 1.5
+    11: 1.5
+    12: 1.0
+    13: 0.8
+    14: 1.5
+    15: 1.2
+    16: 0.5
+  daily_variation_std: 0.15
+
+service_time:
+  distribution: lognorm
+
+no_show:
+  base_rate: 0.05
+  daily_variation_std: 0.01
+  peak_hour_multiplier: 1.2
+
+cancellation:
+  base_rate: 0.02
+
+long_service:
+  probability: 0.03
+  multiplier: 3.0
+
+counter_downtime:
+  probability_per_service: 0.02
+  duration_range:
+    min_minutes: 5
+    max_minutes: 15

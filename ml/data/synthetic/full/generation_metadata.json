@@ -1,0 +1,21 @@
+{
+    "random_seed": 42,
+    "days_simulated": 365,
+    "simulation_start_date": "2023-01-02",
+    "simulation_end_date": "2024-05-24",
+    "total_events": 195838,
+    "target_events": 200000,
+    "offices": [
+        "RJT",
+        "AMD",
+        "STV"
+    ],
+    "services": [
+        "LL",
+        "DL_RENEWAL",
+        "VEH_REG"
+    ],
+    "configuration_summary": "SYNTHETIC discrete-event queue simulation",
+    "generation_timestamp": "2026-10-02T17:51:01.541908",
+    "simulator_version": "1.0"
+}

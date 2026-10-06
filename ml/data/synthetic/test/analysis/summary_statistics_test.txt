@@ -1,0 +1,41 @@
+--- Test Analysis Summary ---
+Total events: 2631
+Events by office: 
+office_id
+AMD    1037
+STV     880
+RJT     714
+Events by service: 
+service_id
+DL_RENEWAL    908
+LL            891
+VEH_REG       832
+Events by day: 
+date
+2023-01-02    510
+2023-01-03    520
+2023-01-04    526
+2023-01-05    556
+2023-01-06    519
+
+Expected total: 2700
+Actual total: 2631
+Difference: -69
+Difference percentage: -2.56%
+
+Completed: 2425
+No-show: 147
+Cancelled: 59
+No-show + cancelled: 0
+
+Average wait: 23.29 min
+Median wait: 18.98 min
+P95 wait: 70.49 min
+Maximum wait: 120.04 min
+Average queue length: 8.06
+Maximum queue length: 34
+
+Average service duration: 10.65 min
+LL average: 7.35 min
+DL_RENEWAL average: 9.41 min
+VEH_REG average: 15.57 min

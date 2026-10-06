@@ -1,0 +1,19 @@
+{
+    "source_dataset": "ml/data/synthetic/features/queue_features_modeling.parquet",
+    "total_rows": 180809,
+    "train_rows": 126566,
+    "validation_rows": 27121,
+    "test_rows": 27122,
+    "split_method": "chronological",
+    "train_percentage": 70.0,
+    "validation_percentage": 15.0,
+    "test_percentage": 15.0,
+    "train_start": "2023-01-02 2023-01-02 09:01:47",
+    "train_end": "2023-12-25 2023-12-25 15:02:56",
+    "validation_start": "2023-12-25 2023-12-25 15:03:25",
+    "validation_end": "2024-03-08 2024-03-08 15:13:58",
+    "test_start": "2024-03-08 2024-03-08 15:14:00",
+    "test_end": "2024-05-24 2024-05-24 16:58:25",
+    "random_seed": null,
+    "shuffle": false
+}
