@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 
-from app.api import predictions, queues, tokens, ws, offices, services, analytics, auth
+from app.api import predictions, queues, tokens, ws, offices, services, analytics, auth, interventions
 from app.services.prediction_service import prediction_service
 from app.db.database import get_db
 
@@ -28,6 +28,7 @@ app.include_router(ws.router)
 app.include_router(offices.router)
 app.include_router(services.router)
 app.include_router(analytics.router)
+app.include_router(interventions.router)
 
 @app.get("/")
 def read_root():

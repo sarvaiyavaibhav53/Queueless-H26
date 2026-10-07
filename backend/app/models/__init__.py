@@ -4,3 +4,4 @@ from app.models.service import Service
 from app.models.token import QueueToken, TokenStatus
 from app.models.queue_counter import QueueCounter
 from app.models.user import User, UserRole
+from app.models.counter import Counter, CounterStatus, CounterService

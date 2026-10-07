@@ -34,7 +34,9 @@ class QueueToken(Base):
     predicted_wait_minutes = Column(Integer, nullable=True)
 
     user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    counter_id = Column(Integer, ForeignKey("counters.id"), nullable=True, index=True)
 
     office = relationship("Office")
     service = relationship("Service")
     user = relationship("User", back_populates="tokens")
+    counter = relationship("Counter", back_populates="tokens")
