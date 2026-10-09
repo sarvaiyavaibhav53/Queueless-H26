@@ -9,27 +9,50 @@ from app.models.counter import Counter, CounterService
 from app.models.token import QueueToken, TokenStatus
 from app.models.queue_counter import QueueCounter
 
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import StaticPool
+from app.models.base import Base
+from app.db.database import get_db
+
 client = TestClient(app, raise_server_exceptions=True)
 
 @pytest.fixture(scope="module")
-def db_session():
-    db = SessionLocal()
-    db.query(QueueToken).delete()
-    db.query(CounterService).delete()
-    db.query(Counter).delete()
-    db.query(QueueCounter).delete()
-    db.query(Service).delete()
-    db.query(Office).delete()
-    db.commit()
-    yield db
-    db.query(QueueToken).delete()
-    db.query(CounterService).delete()
-    db.query(Counter).delete()
-    db.query(QueueCounter).delete()
-    db.query(Service).delete()
-    db.query(Office).delete()
-    db.commit()
+def db_session_holder():
+    test_engine = create_engine(
+        "sqlite://",
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool,
+    )
+    Base.metadata.create_all(bind=test_engine)
+    TestSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=test_engine)
+
+    def override_get_db():
+        db = TestSessionLocal()
+        try:
+            yield db
+        finally:
+            db.close()
+
+    db = TestSessionLocal()
+    yield {"db": db, "override": override_get_db, "engine": test_engine}
     db.close()
+    Base.metadata.drop_all(bind=test_engine)
+    test_engine.dispose()
+
+@pytest.fixture(autouse=True)
+def db_override(db_session_holder):
+    prev_override = app.dependency_overrides.get(get_db)
+    app.dependency_overrides[get_db] = db_session_holder["override"]
+    yield
+    if prev_override is not None:
+        app.dependency_overrides[get_db] = prev_override
+    else:
+        app.dependency_overrides.pop(get_db, None)
+
+@pytest.fixture(scope="module")
+def db_session(db_session_holder):
+    return db_session_holder["db"]
 
 @pytest.fixture(scope="module")
 def setup_data(db_session: Session):

@@ -57,13 +57,17 @@ def clean_test_db():
         finally:
             db.close()
 
+    prev_override = app.dependency_overrides.get(get_db)
     app.dependency_overrides[get_db] = override_get_db
     test_db = TestSessionLocal()
     try:
         yield test_db
     finally:
         test_db.close()
-        app.dependency_overrides.pop(get_db, None)
+        if prev_override is not None:
+            app.dependency_overrides[get_db] = prev_override
+        else:
+            app.dependency_overrides.pop(get_db, None)
         Base.metadata.drop_all(bind=test_engine)
         test_engine.dispose()
 
