@@ -1,3 +1,5 @@
+import os
+os.environ.setdefault("DATABASE_URL", "sqlite:///./test.db")
 import pytest
 from app.main import app
 from app.api.deps import require_citizen, require_employee, require_admin, get_current_user, get_current_user_ws

@@ -91,10 +91,12 @@ class CounterAvailabilityEvent:
     """
     Extension hook for scheduled counter failure / recovery.
     At time_min, counter_id becomes available (is_available=True) or unavailable (is_available=False).
+    announced: bool indicating whether this event is known in advance to the decision world (default: False).
     """
     time_min: float
     counter_id: int
     is_available: bool
+    announced: bool = False
 
 
 class DiscreteEventEngine:

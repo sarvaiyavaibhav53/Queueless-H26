@@ -1,0 +1,150 @@
+{
+  "audit_version": "Step 2E.2A",
+  "timestamp_utc": "2026-10-08T17:15:00Z",
+  "audit_scope": "READ-ONLY FORENSIC AUDIT OF ML SERVING BOUNDARY",
+  "verdict": "PASS WITH NOTES",
+  "frozen_artifacts_inspected": {
+    "dataset_csv": "ml/data/synthetic/production/dataset.csv",
+    "dataset_sha256": "a9bc82e15d74a6eba7104e44e7e05032da77d913f43cd9d1cfc65c58b564346c",
+    "rf_model_joblib": "ml/models/production_wait_time_rf.joblib",
+    "rf_model_sha256": "99de21b0170fb856f4a8fdeaf70c8d1427c1e6739c9ad2a7e72c00c8a6a28af7",
+    "shared_features_py": "shared/features.py",
+    "shared_features_sha256": "acbee091f8cbfa04ef24cf0a1fc010d745a00bad76f14179ad57005d8d471d37",
+    "training_script": "ml/src/train_production_model.py",
+    "benchmark_scenarios_py": "backend/app/simulation/scenarios.py"
+  },
+  "dataset_partition_summary": {
+    "total_rows": 32802,
+    "total_active_trajectories": 1492,
+    "grouping_unit": "config_id (1:1 with trajectory_id)",
+    "train": {
+      "rows": 22706,
+      "trajectories": 1044,
+      "share_pct": 69.22
+    },
+    "validation": {
+      "rows": 4952,
+      "trajectories": 222,
+      "share_pct": 15.10
+    },
+    "test": {
+      "rows": 5144,
+      "trajectories": 226,
+      "share_pct": 15.68,
+      "join_rows": 1882
+    }
+  },
+  "training_feature_distributions": {
+    "hour": {"min": 9.0, "p01": 9.0, "p05": 10.0, "p25": 11.0, "median": 13.0, "p75": 14.0, "p95": 15.0, "p99": 15.0, "max": 16.0},
+    "day_of_week": {"min": 0.0, "p01": 0.0, "p05": 0.0, "p25": 1.0, "median": 2.0, "p75": 3.0, "p95": 4.0, "p99": 4.0, "max": 4.0},
+    "people_ahead": {"min": 0.0, "p01": 0.0, "p05": 0.0, "p25": 0.0, "median": 1.0, "p75": 2.0, "p95": 6.0, "p99": 10.0, "max": 20.0},
+    "queue_length": {"min": 1.0, "p01": 1.0, "p05": 1.0, "p25": 1.0, "median": 2.0, "p75": 4.0, "p95": 8.0, "p99": 12.0, "max": 21.0},
+    "assigned_active_counters": {"min": 1.0, "p01": 1.0, "p05": 1.0, "p25": 2.0, "median": 2.0, "p75": 2.0, "p95": 2.0, "p99": 2.0, "max": 3.0},
+    "busy_assigned_counters": {"min": 1.0, "p01": 1.0, "p05": 1.0, "p25": 2.0, "median": 2.0, "p75": 2.0, "p95": 2.0, "p99": 2.0, "max": 3.0},
+    "max_elapsed_service_minutes": {"min": 0.0, "p01": 0.42, "p05": 1.05, "p25": 3.52, "median": 7.42, "p75": 13.06, "p95": 20.21, "p99": 26.69, "max": 60.33},
+    "service_mean_minutes": {"min": 7.0, "p01": 7.0, "p05": 7.0, "p25": 8.0, "median": 10.0, "p75": 14.0, "p95": 15.0, "p99": 15.0, "max": 15.0},
+    "service_std_minutes": {"min": 2.8, "p01": 2.8, "p05": 2.8, "p25": 3.2, "median": 4.0, "p75": 5.6, "p95": 6.0, "p99": 6.0, "max": 6.0},
+    "arrival_rate_30m": {"min": 0.0, "p01": 2.0, "p05": 4.0, "p25": 8.0, "median": 12.0, "p75": 16.0, "p95": 22.0, "p99": 26.0, "max": 34.0},
+    "arrival_rate_60m": {"min": 2.0, "p01": 3.0, "p05": 5.0, "p25": 8.0, "median": 11.0, "p75": 14.0, "p95": 19.0, "p99": 22.0, "max": 28.0},
+    "service_capacity_mu": {"min": 4.29, "p01": 6.0, "p05": 7.5, "p25": 8.57, "median": 12.0, "p75": 12.0, "p95": 17.14, "p99": 17.14, "max": 18.0},
+    "traffic_intensity": {"min": 0.17, "p01": 0.33, "p05": 0.46, "p25": 0.75, "median": 0.93, "p75": 1.13, "p95": 1.58, "p99": 2.03, "max": 3.27}
+  },
+  "suspicious_states_in_train": [
+    {
+      "state": "State 1: Waiting customers exist while busy_assigned_counters == 0",
+      "count": 0,
+      "pct": 0.0,
+      "trajectories": 0,
+      "join_count": 0,
+      "periodic_count": 0,
+      "support_status": "ABSENT (OOD)"
+    },
+    {
+      "state": "State 2: people_ahead >= 11",
+      "count": 158,
+      "pct": 0.696,
+      "trajectories": 32,
+      "join_count": 98,
+      "periodic_count": 60,
+      "support_status": "SPARSE"
+    },
+    {
+      "state": "State 3: people_ahead >= 15",
+      "count": 26,
+      "pct": 0.115,
+      "trajectories": 7,
+      "join_count": 17,
+      "periodic_count": 9,
+      "support_status": "EXTREMELY SPARSE"
+    },
+    {
+      "state": "State 4: queue_length >= 15",
+      "count": 78,
+      "pct": 0.344,
+      "trajectories": 9,
+      "join_count": 26,
+      "periodic_count": 52,
+      "support_status": "EXTREMELY SPARSE"
+    },
+    {
+      "state": "State 5: traffic_intensity >= 1.0 and busy_assigned_counters == 0",
+      "count": 0,
+      "pct": 0.0,
+      "trajectories": 0,
+      "join_count": 0,
+      "periodic_count": 0,
+      "support_status": "ABSENT"
+    },
+    {
+      "state": "State 6: queue_length >= 1 and busy_assigned_counters < assigned_active_counters",
+      "count": 29,
+      "pct": 0.128,
+      "trajectories": 17,
+      "join_count": 13,
+      "periodic_count": 16,
+      "support_status": "RARE"
+    },
+    {
+      "state": "State 7: regime in [FAILURE, INTERVENTION] and queue_length >= 1",
+      "count": 2815,
+      "pct": 12.398,
+      "trajectories": 106,
+      "join_count": 951,
+      "periodic_count": 1864,
+      "support_status": "REPRESENTED"
+    }
+  ],
+  "frozen_benchmark_unseen_check": {
+    "total_benchmark_tokens": 64,
+    "share_busy_counters_zero": 100.0,
+    "share_max_elapsed_zero": 100.0,
+    "overall_rf_mae": 9.3261,
+    "overall_pure_analytical_mae": 2.5617,
+    "overall_residual_analytical_mae": 2.5617,
+    "root_cause": "Benchmark evaluation at t=0 has preloaded queues with 100% idle counters (busy=0), an operational state completely absent from the continuous simulation training distribution (0% occurrence in train). When counters are idle, citizens receive immediate dispatch (wait=0.0m), perfectly handled by analytical queuing theory but misinterpreted by RF as continuous steady state where k=0 implies waiting behind busy counters."
+  },
+  "deep_queue_analysis_k_ge_11": {
+    "train": {"count": 158, "pct": 0.70, "trajectories": 32, "target_mean": 72.17, "rf_mae": 3.599, "rf_bias": -0.212, "resid_mae": 5.438},
+    "val": {"count": 69, "pct": 1.39, "trajectories": 12, "target_mean": 66.91, "rf_mae": 7.688, "rf_bias": -2.697, "resid_mae": 5.059},
+    "test_join": {"count": 32, "pct": 1.70, "trajectories": 9, "target_mean": 73.12, "rf_mae": 6.252, "rf_bias": -2.215, "resid_mae": 5.034}
+  },
+  "hybrid_policy_evaluation": {
+    "guard_definition": "busy_assigned_counters == 0 OR busy_assigned_counters < assigned_active_counters OR assigned_active_counters == 0 OR people_ahead >= 15",
+    "test_set_join": {
+      "total_rows": 1882,
+      "fallback_triggered_count": 8,
+      "fallback_triggered_pct": 0.43,
+      "rf_mae": 3.2032,
+      "hybrid_mae": 3.1987,
+      "residual_mae": 3.5019
+    },
+    "frozen_benchmark_tokens": {
+      "total_tokens": 64,
+      "fallback_triggered_count": 64,
+      "fallback_triggered_pct": 100.0,
+      "rf_mae": 9.3261,
+      "hybrid_mae": 2.5617,
+      "residual_mae": 2.5617
+    }
+  }
+}

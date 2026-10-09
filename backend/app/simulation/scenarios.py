@@ -373,6 +373,23 @@ class ScenarioConfig:
                 )
             queues_map[s_id] = SimQueue(service_id=s_id, waiting_citizens=waiting_citizens)
 
+        # Derive initial traffic intensity rho by service from Phase 0
+        rho_by_service: Dict[int, float] = {}
+        if self.arrival_phases:
+            p0 = self.arrival_phases[0]
+            if p0.target_rho_by_service:
+                rho_by_service = dict(p0.target_rho_by_service)
+            elif p0.arrival_rates_per_hour:
+                for s_id, rate in p0.arrival_rates_per_hour.items():
+                    svc = services_map.get(s_id)
+                    if svc and svc.mean_service_minutes > 0.0:
+                        active_count = sum(
+                            1 for c in counters_map.values()
+                            if c.is_active and c.assigned_service_id == s_id
+                        )
+                        mu = active_count * (60.0 / svc.mean_service_minutes)
+                        rho_by_service[s_id] = rate / mu if mu > 0.0 else 99.0
+
         return SimulationState(
             office_id=self.office_id,
             office_code=self.office_code,
@@ -381,21 +398,25 @@ class ScenarioConfig:
             queues=queues_map,
             counters=counters_map,
             initial_serving_tokens={},
+            traffic_intensity_by_service=rho_by_service,
         )
 
     def build_arrival_process(
         self,
         state: SimulationState,
         rng: Optional[random.Random] = None,
+        for_decision: bool = False,
     ) -> PhaseArrivalProcess:
         """
         Builds a PhaseArrivalProcess wired to the state's capacities and scenario phases.
+        If for_decision is True, filters out unannounced arrival bursts.
         """
         capacities = compute_all_service_capacities_mu(state)
+        bursts = [b for b in self.arrival_bursts if b.announced] if for_decision else self.arrival_bursts
         return PhaseArrivalProcess(
             phases=self.arrival_phases,
             service_capacities_per_hour=capacities,
-            bursts=self.arrival_bursts,
+            bursts=bursts,
             rng=rng if rng is not None else random.Random(self.base_seed),
         )
 
@@ -411,9 +432,10 @@ class ScenarioConfig:
             default_cv=DEFAULT_CV,
         )
 
-    def build_evaluator_config(self) -> "EvaluatorConfig":
+    def build_evaluator_config(self, for_decision: bool = True) -> "EvaluatorConfig":
         """
         Derives an EvaluatorConfig matching this scenario's arrival rates and parameters.
+        Enforces information boundary: when for_decision=True, only announced events are visible.
         """
         from app.interventions.models import EvaluatorConfig
 
@@ -436,6 +458,12 @@ class ScenarioConfig:
             if thresh is not None
         }
 
+        avail_events = (
+            tuple(e for e in self.availability_events if e.announced)
+            if for_decision
+            else tuple(self.availability_events)
+        )
+
         return EvaluatorConfig(
             horizon_minutes=self.horizon_minutes,
             replications=self.experiment_params.replications,
@@ -444,8 +472,8 @@ class ScenarioConfig:
             arrival_rates_per_hour=rates if rates else None,
             candidate_durations=self.experiment_params.candidate_durations_minutes,
             switching_delay_min=self.experiment_params.switching_delay_minutes,
-            availability_events=tuple(self.availability_events),
-            arrival_process_factory=lambda st, rng: self.build_arrival_process(st, rng=rng),
+            availability_events=avail_events,
+            arrival_process_factory=lambda st, rng: self.build_arrival_process(st, rng=rng, for_decision=for_decision),
             service_process_factory=lambda rng: self.build_service_process(rng=rng),
         )
 
@@ -773,17 +801,191 @@ def build_rto_scenario_healthy() -> ScenarioConfig:
     )
 
 
+def build_scenario_d_announced() -> ScenarioConfig:
+    """
+    SCENARIO D (ANNOUNCED)
+    Variant of Scenario D where the BC arrival surge is announced in advance (announced=True).
+    PRAVAAH decision world is aware of the future surge from t=30 to t=60.
+    """
+    base_d = build_scenario_d_temporary_intervention()
+    announced_bursts = [
+        ArrivalBurst(
+            burst_name=b.burst_name,
+            service_id=b.service_id,
+            start_min=b.start_min,
+            end_min=b.end_min,
+            multiplier=b.multiplier,
+            additional_rate_per_hour=b.additional_rate_per_hour,
+            announced=True,
+        )
+        for b in base_d.arrival_bursts
+    ]
+    return ScenarioConfig(
+        scenario_id="scenario_d_announced",
+        scenario_name="Scenario D (Announced): Announced Look-Ahead Burst",
+        description="Scenario D with announced=True: future BC arrival surge is known to decision simulation.",
+        office_id=base_d.office_id,
+        office_code=base_d.office_code,
+        horizon_minutes=base_d.horizon_minutes,
+        base_seed=base_d.base_seed,
+        services=base_d.services,
+        initial_counters=base_d.initial_counters,
+        initial_queue_counts=base_d.initial_queue_counts,
+        arrival_phases=base_d.arrival_phases,
+        arrival_bursts=announced_bursts,
+        availability_events=base_d.availability_events,
+        experiment_params=base_d.experiment_params,
+    )
+
+
+def build_scenario_d_unannounced() -> ScenarioConfig:
+    """
+    SCENARIO D (UNANNOUNCED)
+    Variant of Scenario D where the BC arrival surge exists but is NOT announced (announced=False).
+    PRAVAAH decision world simulates base traffic only; scoring world experiences the actual surge.
+    """
+    base_d = build_scenario_d_temporary_intervention()
+    unannounced_bursts = [
+        ArrivalBurst(
+            burst_name=b.burst_name,
+            service_id=b.service_id,
+            start_min=b.start_min,
+            end_min=b.end_min,
+            multiplier=b.multiplier,
+            additional_rate_per_hour=b.additional_rate_per_hour,
+            announced=False,
+        )
+        for b in base_d.arrival_bursts
+    ]
+    return ScenarioConfig(
+        scenario_id="scenario_d_unannounced",
+        scenario_name="Scenario D (Unannounced): Unannounced Look-Ahead Burst",
+        description="Scenario D with announced=False: future BC arrival surge is hidden from decision simulation.",
+        office_id=base_d.office_id,
+        office_code=base_d.office_code,
+        horizon_minutes=base_d.horizon_minutes,
+        base_seed=base_d.base_seed,
+        services=base_d.services,
+        initial_counters=base_d.initial_counters,
+        initial_queue_counts=base_d.initial_queue_counts,
+        arrival_phases=base_d.arrival_phases,
+        arrival_bursts=unannounced_bursts,
+        availability_events=base_d.availability_events,
+        experiment_params=base_d.experiment_params,
+    )
+
+
+def build_scenario_e_known() -> ScenarioConfig:
+    """
+    SCENARIO E (KNOWN)
+    Variant of Scenario E where counter C1 is already UNAVAILABLE at t=0 (part of current observable state).
+    PRAVAAH decision world immediately observes the failure and reduced capacity at snapshot time.
+    """
+    base_e = build_scenario_e_counter_failure()
+    # At t=0, C1 is already inactive
+    known_counters = [
+        SimCounter(
+            counter_id=c.counter_id,
+            office_id=c.office_id,
+            name=c.name,
+            assigned_service_id=c.assigned_service_id,
+            eligible_service_ids=c.eligible_service_ids,
+            is_active=False if c.counter_id == 1 else c.is_active,
+        )
+        for c in base_e.initial_counters
+    ]
+    return ScenarioConfig(
+        scenario_id="scenario_e_known",
+        scenario_name="Scenario E (Known): Known Counter Failure at t=0",
+        description="Counter C1 failure is already active at t=0 (observable in initial state; no future event).",
+        office_id=base_e.office_id,
+        office_code=base_e.office_code,
+        horizon_minutes=base_e.horizon_minutes,
+        base_seed=base_e.base_seed,
+        services=base_e.services,
+        initial_counters=known_counters,
+        initial_queue_counts=base_e.initial_queue_counts,
+        arrival_phases=[
+            ArrivalPhase(
+                phase_name="counter_failure_known_phase",
+                start_min=0.0,
+                end_min=60.0,
+                arrival_rates_per_hour={
+                    SERVICE_PT_ID: 9.00,
+                    SERVICE_WC_ID: 5.20,
+                    SERVICE_BC_ID: 10.285714,
+                },
+            )
+        ],
+        arrival_bursts=[],
+        availability_events=[],
+        experiment_params=base_e.experiment_params,
+    )
+
+
+def build_scenario_e_unknown() -> ScenarioConfig:
+    """
+    SCENARIO E (UNKNOWN)
+    Variant of Scenario E where counter C1 failure occurs at t=10.0 min and is UNANNOUNCED (announced=False).
+    PRAVAAH decision world does not know of the outage; failure still executes during scoring.
+    """
+    base_e = build_scenario_e_counter_failure()
+    unannounced_events = [
+        CounterAvailabilityEvent(
+            time_min=e.time_min,
+            counter_id=e.counter_id,
+            is_available=e.is_available,
+            announced=False,
+        )
+        for e in base_e.availability_events
+    ]
+    return ScenarioConfig(
+        scenario_id="scenario_e_unknown",
+        scenario_name="Scenario E (Unknown): Unannounced Counter Failure at t=10",
+        description="Counter C1 failure at t=10 is unannounced: hidden from decision world, active during scoring.",
+        office_id=base_e.office_id,
+        office_code=base_e.office_code,
+        horizon_minutes=base_e.horizon_minutes,
+        base_seed=base_e.base_seed,
+        services=base_e.services,
+        initial_counters=base_e.initial_counters,
+        initial_queue_counts=base_e.initial_queue_counts,
+        arrival_phases=base_e.arrival_phases,
+        arrival_bursts=base_e.arrival_bursts,
+        availability_events=unannounced_events,
+        experiment_params=base_e.experiment_params,
+    )
+
+
 # =============================================================================
 # 6. SCENARIO REGISTRY
 # =============================================================================
 
 SCENARIO_REGISTRY: Dict[str, Callable[[], ScenarioConfig]] = {
+    # 6 Core Scenarios
     "scenario_a_healthy": build_scenario_a_healthy,
     "scenario_b_pt_pressure": build_scenario_b_pt_pressure,
     "scenario_c_donor_constraint": build_scenario_c_donor_constraint,
     "scenario_d_temporary_intervention": build_scenario_d_temporary_intervention,
+    "scenario_d_look_ahead_burst": build_scenario_d_temporary_intervention,
     "scenario_e_counter_failure": build_scenario_e_counter_failure,
     "scenario_rto_healthy": build_rto_scenario_healthy,
+    # 4 Information-Boundary Variants
+    "scenario_d_announced": build_scenario_d_announced,
+    "scenario_d_unannounced": build_scenario_d_unannounced,
+    "scenario_e_known": build_scenario_e_known,
+    "scenario_e_unknown": build_scenario_e_unknown,
+    # Short alias keys
+    "A": build_scenario_a_healthy,
+    "B": build_scenario_b_pt_pressure,
+    "C": build_scenario_c_donor_constraint,
+    "D": build_scenario_d_temporary_intervention,
+    "E": build_scenario_e_counter_failure,
+    "RTO Healthy": build_rto_scenario_healthy,
+    "D_announced": build_scenario_d_announced,
+    "D_unannounced": build_scenario_d_unannounced,
+    "E_known": build_scenario_e_known,
+    "E_unknown": build_scenario_e_unknown,
 }
 
 

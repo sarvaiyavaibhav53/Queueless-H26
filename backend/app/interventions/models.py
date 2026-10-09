@@ -43,7 +43,7 @@ class EvaluatorConfig:
     p90_thresholds: Dict[int, float] = field(default_factory=dict)  # service_id -> P90 threshold (min)
     max_candidates: int = 10
     arrival_rates_per_hour: Optional[Dict[int, float]] = None
-    candidate_durations: Optional[Sequence[float]] = None
+    candidate_durations: Optional[Sequence[float]] = (15.0, 30.0)
     switching_delay_min: float = 3.0
     availability_events: Sequence[Any] = field(default_factory=tuple)
     arrival_process_factory: Optional[Any] = None

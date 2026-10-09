@@ -45,6 +45,7 @@ def test_model_loading():
     assert hasattr(service.model, 'predict')
 
 def test_prediction_correctness(real_model, sample_rows, client):
+    # Test backward-compatible legacy prediction on isolated service instance
     service = WaitTimePredictionService()
     service.load_model(MODEL_PATH)
     
@@ -53,50 +54,131 @@ def test_prediction_correctness(real_model, sample_rows, client):
         input_df = pd.DataFrame([[row[f] for f in FEATURES]], columns=FEATURES)
         expected_pred = float(real_model.predict(input_df)[0])
         
-        # service prediction
+        # isolated service prediction
         service_pred = service.predict_wait_time(row)
-        
-        # API prediction
-        api_resp = client.post("/api/v1/predictions/wait-time", json=row)
-        assert api_resp.status_code == 200
-        api_pred = api_resp.json()['predicted_wait_minutes']
-        
-        print(f"Direct: {expected_pred}, Service: {service_pred}, API: {api_pred}")
-        
-        # INTENTIONAL FAILURE REVERTED
         assert abs(expected_pred - service_pred) < 1e-5
-        assert abs(expected_pred - api_pred) < 1e-5
+        
+        # Authoritative production API endpoint MUST reject legacy unsupported identities (RJT / LL)
+        api_resp = client.post("/api/v1/predictions/wait-time", json=row)
+        assert api_resp.status_code == 422
+        assert api_resp.json()["detail"]["error_code"] in ["UNSUPPORTED_MODEL_OFFICE", "UNSUPPORTED_MODEL_SERVICE"]
 
-def test_api_valid_request(sample_rows, client):
-    row = sample_rows[0]
-    resp = client.post("/api/v1/predictions/wait-time", json=row)
+    # Authoritative production API endpoint MUST serve genuinely supported model identities (MUNI / PT) via RF
+    valid_prod_row = {
+        "office_id": "MUNI",
+        "service_id": "PT",
+        "hour": 10,
+        "day_of_week": 1,
+        "people_ahead": 2,
+        "queue_length": 3,
+        "active_counters": 2,
+        "historical_avg_service_minutes": 10.0,
+    }
+    prod_resp = client.post("/api/v1/predictions/wait-time", json=valid_prod_row)
+    assert prod_resp.status_code == 200
+    prod_data = prod_resp.json()
+    assert prod_data["predicted_wait_minutes"] > 0.0
+    assert prod_data["prediction_source"] == "RF"
+
+def test_api_valid_request(client):
+    valid_payload = {
+        "office_id": "MUNI",
+        "service_id": "PT",
+        "hour": 10,
+        "day_of_week": 1,
+        "people_ahead": 2,
+        "queue_length": 3,
+        "active_counters": 2,
+        "historical_avg_service_minutes": 10.0,
+    }
+    resp = client.post("/api/v1/predictions/wait-time", json=valid_payload)
     assert resp.status_code == 200
-    assert "predicted_wait_minutes" in resp.json()
+    data = resp.json()
+    assert "predicted_wait_minutes" in data
+    assert data["prediction_source"] == "RF"
+    assert data["predicted_wait_minutes"] > 0.0
 
-def test_api_missing_field(sample_rows, client):
-    row = sample_rows[0].copy()
-    del row["people_ahead"]
+def test_api_missing_field(client):
+    row = {
+        "office_id": "MUNI",
+        "service_id": "PT",
+        "hour": 10,
+        "day_of_week": 1,
+        "queue_length": 3,
+        "active_counters": 2,
+    }  # missing people_ahead
     resp = client.post("/api/v1/predictions/wait-time", json=row)
     assert resp.status_code == 422
 
-def test_api_invalid_office(sample_rows, client):
-    row = sample_rows[0].copy()
-    row["office_id"] = "INVALID"
+def test_api_unknown_office(client):
+    row = {
+        "office_id": "UNKNOWN_OFFICE",
+        "service_id": "PT",
+        "hour": 10,
+        "day_of_week": 1,
+        "people_ahead": 2,
+        "queue_length": 3,
+        "active_counters": 2,
+    }
     resp = client.post("/api/v1/predictions/wait-time", json=row)
     assert resp.status_code == 422
+    assert resp.json()["detail"]["error_code"] == "UNKNOWN_APPLICATION_OFFICE"
 
-def test_api_invalid_service(sample_rows, client):
-    row = sample_rows[0].copy()
-    row["service_id"] = "INVALID"
+def test_api_unknown_service(client):
+    row = {
+        "office_id": "MUNI",
+        "service_id": "UNKNOWN_SERVICE",
+        "hour": 10,
+        "day_of_week": 1,
+        "people_ahead": 2,
+        "queue_length": 3,
+        "active_counters": 2,
+    }
     resp = client.post("/api/v1/predictions/wait-time", json=row)
     assert resp.status_code == 422
+    assert resp.json()["detail"]["error_code"] == "UNKNOWN_APPLICATION_SERVICE"
 
-def test_api_invalid_numeric(sample_rows, client):
-    row = sample_rows[0].copy()
-    row["active_counters"] = -5
+def test_api_unsupported_model_office(client):
+    row = {
+        "office_id": "RJT",
+        "service_id": "PT",
+        "hour": 10,
+        "day_of_week": 1,
+        "people_ahead": 2,
+        "queue_length": 3,
+        "active_counters": 2,
+    }
+    resp = client.post("/api/v1/predictions/wait-time", json=row)
+    assert resp.status_code == 422
+    assert resp.json()["detail"]["error_code"] == "UNSUPPORTED_MODEL_OFFICE"
+
+def test_api_unsupported_model_service(client):
+    row = {
+        "office_id": "MUNI",
+        "service_id": "LL",
+        "hour": 10,
+        "day_of_week": 1,
+        "people_ahead": 2,
+        "queue_length": 3,
+        "active_counters": 2,
+    }
+    resp = client.post("/api/v1/predictions/wait-time", json=row)
+    assert resp.status_code == 422
+    assert resp.json()["detail"]["error_code"] == "UNSUPPORTED_MODEL_SERVICE"
+
+def test_api_invalid_numeric(client):
+    row = {
+        "office_id": "MUNI",
+        "service_id": "PT",
+        "hour": 10,
+        "day_of_week": 1,
+        "people_ahead": 2,
+        "queue_length": 3,
+        "active_counters": -5,
+    }
     resp = client.post("/api/v1/predictions/wait-time", json=row)
     assert resp.status_code == 422
 
 def test_failure_verification(real_model, sample_rows):
-    # This test will be temporarily edited to fail during verification
     assert True
+

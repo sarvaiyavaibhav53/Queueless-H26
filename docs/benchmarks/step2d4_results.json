@@ -1,0 +1,3202 @@
+{
+  "benchmark_version": "Step 2D.4 \u2014 Methodology Correction + Reproducible Benchmarking",
+  "timestamp_utc": "2026-10-08T06:38:04.557771+00:00",
+  "runtime_seconds": 16.03,
+  "decision_replications": 100,
+  "evaluation_replications": 100,
+  "decision_seed_formula": "seed_r = 100000 + r * 1000 (for r in 0..99)",
+  "evaluation_seed_formula": "seed_r = 200000 + r * 1000 (for r in 0..99)",
+  "stability_thresholds": {
+    "stable_max": 0.85,
+    "watch_max": 1.0,
+    "is_synthetic_assumption": true
+  },
+  "scenarios": {
+    "scenario_a_healthy": {
+      "scenario_id": "scenario_a_healthy",
+      "scenario_name": "Scenario A: Healthy Operation",
+      "office_code": "MUNI",
+      "horizon_minutes": 60.0,
+      "decision_replications": 100,
+      "evaluation_replications": 100,
+      "baseline": {
+        "policy_type": "BASELINE",
+        "candidate_id": null,
+        "candidate_description": "No counter reassignment (Baseline)",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 55.1532,
+        "std_total_waiting_person_minutes": 44.6394,
+        "standard_error": 4.4639,
+        "min_total_waiting_person_minutes": 8.1967,
+        "max_total_waiting_person_minutes": 226.1897,
+        "mean_avg_waiting_time_minutes": 1.9265,
+        "p90_waiting_time_minutes": 7.4325,
+        "overall_max_waiting_time_minutes": 29.593,
+        "mean_customers_served": 21.21,
+        "mean_unserved_count": 1.61,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 20.661,
+            "mean_avg_wait_minutes": 2.0252,
+            "p90_wait_minutes": 8.3312,
+            "mean_served": 7.25,
+            "mean_unserved": 0.5
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 17.4275,
+            "mean_avg_wait_minutes": 2.0464,
+            "p90_wait_minutes": 10.7831,
+            "mean_served": 4.41,
+            "mean_unserved": 0.7
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 17.0647,
+            "mean_avg_wait_minutes": 1.4397,
+            "p90_wait_minutes": 5.2251,
+            "mean_served": 9.55,
+            "mean_unserved": 0.41
+          }
+        }
+      },
+      "naive": {
+        "policy_type": "NAIVE",
+        "candidate_id": null,
+        "candidate_description": "No counter reassignment (Baseline)",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 55.1532,
+        "std_total_waiting_person_minutes": 44.6394,
+        "standard_error": 4.4639,
+        "min_total_waiting_person_minutes": 8.1967,
+        "max_total_waiting_person_minutes": 226.1897,
+        "mean_avg_waiting_time_minutes": 1.9265,
+        "p90_waiting_time_minutes": 7.4325,
+        "overall_max_waiting_time_minutes": 29.593,
+        "mean_customers_served": 21.21,
+        "mean_unserved_count": 1.61,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 20.661,
+            "mean_avg_wait_minutes": 2.0252,
+            "p90_wait_minutes": 8.3312,
+            "mean_served": 7.25,
+            "mean_unserved": 0.5
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 17.4275,
+            "mean_avg_wait_minutes": 2.0464,
+            "p90_wait_minutes": 10.7831,
+            "mean_served": 4.41,
+            "mean_unserved": 0.7
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 17.0647,
+            "mean_avg_wait_minutes": 1.4397,
+            "p90_wait_minutes": 5.2251,
+            "mean_served": 9.55,
+            "mean_unserved": 0.41
+          }
+        }
+      },
+      "naive_30": {
+        "policy_type": "NAIVE",
+        "candidate_id": null,
+        "candidate_description": "No counter reassignment (Baseline)",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 55.1532,
+        "std_total_waiting_person_minutes": 44.6394,
+        "standard_error": 4.4639,
+        "min_total_waiting_person_minutes": 8.1967,
+        "max_total_waiting_person_minutes": 226.1897,
+        "mean_avg_waiting_time_minutes": 1.9265,
+        "p90_waiting_time_minutes": 7.4325,
+        "overall_max_waiting_time_minutes": 29.593,
+        "mean_customers_served": 21.21,
+        "mean_unserved_count": 1.61,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 20.661,
+            "mean_avg_wait_minutes": 2.0252,
+            "p90_wait_minutes": 8.3312,
+            "mean_served": 7.25,
+            "mean_unserved": 0.5
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 17.4275,
+            "mean_avg_wait_minutes": 2.0464,
+            "p90_wait_minutes": 10.7831,
+            "mean_served": 4.41,
+            "mean_unserved": 0.7
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 17.0647,
+            "mean_avg_wait_minutes": 1.4397,
+            "p90_wait_minutes": 5.2251,
+            "mean_served": 9.55,
+            "mean_unserved": 0.41
+          }
+        }
+      },
+      "naive_15": {
+        "policy_type": "NAIVE",
+        "candidate_id": null,
+        "candidate_description": "No counter reassignment (Baseline)",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 55.1532,
+        "std_total_waiting_person_minutes": 44.6394,
+        "standard_error": 4.4639,
+        "min_total_waiting_person_minutes": 8.1967,
+        "max_total_waiting_person_minutes": 226.1897,
+        "mean_avg_waiting_time_minutes": 1.9265,
+        "p90_waiting_time_minutes": 7.4325,
+        "overall_max_waiting_time_minutes": 29.593,
+        "mean_customers_served": 21.21,
+        "mean_unserved_count": 1.61,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 20.661,
+            "mean_avg_wait_minutes": 2.0252,
+            "p90_wait_minutes": 8.3312,
+            "mean_served": 7.25,
+            "mean_unserved": 0.5
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 17.4275,
+            "mean_avg_wait_minutes": 2.0464,
+            "p90_wait_minutes": 10.7831,
+            "mean_served": 4.41,
+            "mean_unserved": 0.7
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 17.0647,
+            "mean_avg_wait_minutes": 1.4397,
+            "p90_wait_minutes": 5.2251,
+            "mean_served": 9.55,
+            "mean_unserved": 0.41
+          }
+        }
+      },
+      "pravaah": {
+        "policy_type": "BASELINE",
+        "candidate_id": null,
+        "candidate_description": "No counter reassignment (Baseline)",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 55.1532,
+        "std_total_waiting_person_minutes": 44.6394,
+        "standard_error": 4.4639,
+        "min_total_waiting_person_minutes": 8.1967,
+        "max_total_waiting_person_minutes": 226.1897,
+        "mean_avg_waiting_time_minutes": 1.9265,
+        "p90_waiting_time_minutes": 7.4325,
+        "overall_max_waiting_time_minutes": 29.593,
+        "mean_customers_served": 21.21,
+        "mean_unserved_count": 1.61,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 20.661,
+            "mean_avg_wait_minutes": 2.0252,
+            "p90_wait_minutes": 8.3312,
+            "mean_served": 7.25,
+            "mean_unserved": 0.5
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 17.4275,
+            "mean_avg_wait_minutes": 2.0464,
+            "p90_wait_minutes": 10.7831,
+            "mean_served": 4.41,
+            "mean_unserved": 0.7
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 17.0647,
+            "mean_avg_wait_minutes": 1.4397,
+            "p90_wait_minutes": 5.2251,
+            "mean_served": 9.55,
+            "mean_unserved": 0.41
+          }
+        }
+      },
+      "selected_policy": "BASELINE",
+      "selected_candidate_id": null,
+      "selected_action_description": "No counter reassignment (No intervention required)",
+      "pravaah_decision_info": {
+        "selected_candidate_id": null,
+        "selected_policy": "BASELINE",
+        "decision_replications": 100,
+        "decision_mean_wait": 49.2645,
+        "decision_margin": {
+          "condition_a_10pct_passed": false,
+          "relative_improvement": -0.2128,
+          "pct_improvement": -21.28,
+          "condition_b_70pct_wins_passed": false,
+          "decision_wins": 23,
+          "decision_win_rate": 0.23,
+          "best_candidate_id": "CAND_C3_TO_S1_D15",
+          "decision_notes": [
+            "Failed 10% improvement margin: observed -21.28% < 10.0% required.",
+            "Failed 70% paired win-rate: observed 23/100 (23.0%) < 70.0% required."
+          ]
+        },
+        "is_feasible": true,
+        "decision_notes": [
+          "Failed 10% improvement margin: observed -21.28% < 10.0% required.",
+          "Failed 70% paired win-rate: observed 23/100 (23.0%) < 70.0% required."
+        ]
+      },
+      "vs_baseline": {
+        "comparison_name": "PRAVAAH vs Baseline",
+        "mean_difference": 0.0,
+        "standard_error": 0.0,
+        "ci_95": [
+          0.0,
+          0.0
+        ],
+        "win_count": 0,
+        "loss_count": 0,
+        "tie_count": 100,
+        "win_rate": 0.0
+      },
+      "vs_naive_30": {
+        "comparison_name": "PRAVAAH vs Naive-30",
+        "mean_difference": 0.0,
+        "standard_error": 0.0,
+        "ci_95": [
+          0.0,
+          0.0
+        ],
+        "win_count": 0,
+        "loss_count": 0,
+        "tie_count": 100,
+        "win_rate": 0.0
+      },
+      "vs_naive_15": {
+        "comparison_name": "PRAVAAH vs Naive-15",
+        "mean_difference": 0.0,
+        "standard_error": 0.0,
+        "ci_95": [
+          0.0,
+          0.0
+        ],
+        "win_count": 0,
+        "loss_count": 0,
+        "tie_count": 100,
+        "win_rate": 0.0
+      },
+      "naive_30_vs_baseline": {
+        "comparison_name": "Naive-30 vs Baseline",
+        "mean_difference": 0.0,
+        "standard_error": 0.0,
+        "ci_95": [
+          0.0,
+          0.0
+        ],
+        "win_count": 0,
+        "loss_count": 0,
+        "tie_count": 100,
+        "win_rate": 0.0
+      },
+      "improvement_vs_baseline_person_min": 0.0,
+      "pct_improvement_vs_baseline": 0.0,
+      "improvement_vs_naive_person_min": 0.0,
+      "pct_improvement_vs_naive": 0.0,
+      "pravaah_beats_baseline": false,
+      "pravaah_beats_naive": false,
+      "pravaah_beats_naive_30": false,
+      "pravaah_beats_naive_15": false,
+      "naive_15_beats_naive_30": false,
+      "observations": [
+        "PRAVAAH concluded NO INTERVENTION REQUIRED (Margin/Feasibility threshold default)."
+      ]
+    },
+    "scenario_b_pt_pressure": {
+      "scenario_id": "scenario_b_pt_pressure",
+      "scenario_name": "Scenario B: Property Tax Queue Pressure",
+      "office_code": "MUNI",
+      "horizon_minutes": 60.0,
+      "decision_replications": 100,
+      "evaluation_replications": 100,
+      "baseline": {
+        "policy_type": "BASELINE",
+        "candidate_id": null,
+        "candidate_description": "No counter reassignment (Baseline)",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 469.5729,
+        "std_total_waiting_person_minutes": 121.9688,
+        "standard_error": 12.1969,
+        "min_total_waiting_person_minutes": 240.6375,
+        "max_total_waiting_person_minutes": 755.4711,
+        "mean_avg_waiting_time_minutes": 12.8476,
+        "p90_waiting_time_minutes": 34.7281,
+        "overall_max_waiting_time_minutes": 52.8965,
+        "mean_customers_served": 23.98,
+        "mean_unserved_count": 8.41,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 445.8592,
+            "mean_avg_wait_minutes": 25.9975,
+            "p90_wait_minutes": 38.015,
+            "mean_served": 10.99,
+            "mean_unserved": 7.97
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 14.4096,
+            "mean_avg_wait_minutes": 2.2374,
+            "p90_wait_minutes": 9.5073,
+            "mean_served": 4.6,
+            "mean_unserved": 0.28
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 9.3041,
+            "mean_avg_wait_minutes": 0.8997,
+            "p90_wait_minutes": 3.4378,
+            "mean_served": 8.39,
+            "mean_unserved": 0.16
+          }
+        }
+      },
+      "naive": {
+        "policy_type": "NAIVE",
+        "candidate_id": "NAIVE_LONGEST_QUEUE_30",
+        "candidate_description": "Naive longest-queue reassignment: Counter 5 (C5) reassigned to service 1 for 30m",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 384.4842,
+        "std_total_waiting_person_minutes": 120.6142,
+        "standard_error": 12.0614,
+        "min_total_waiting_person_minutes": 162.0618,
+        "max_total_waiting_person_minutes": 665.8166,
+        "mean_avg_waiting_time_minutes": 11.6355,
+        "p90_waiting_time_minutes": 23.7894,
+        "overall_max_waiting_time_minutes": 39.7031,
+        "mean_customers_served": 26.83,
+        "mean_unserved_count": 5.4,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 322.5922,
+            "mean_avg_wait_minutes": 17.8774,
+            "p90_wait_minutes": 26.2466,
+            "mean_served": 14.4,
+            "mean_unserved": 4.62
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 14.6708,
+            "mean_avg_wait_minutes": 2.2844,
+            "p90_wait_minutes": 10.7052,
+            "mean_served": 4.55,
+            "mean_unserved": 0.31
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 47.2212,
+            "mean_avg_wait_minutes": 4.9144,
+            "p90_wait_minutes": 13.9163,
+            "mean_served": 7.88,
+            "mean_unserved": 0.47
+          }
+        }
+      },
+      "naive_30": {
+        "policy_type": "NAIVE",
+        "candidate_id": "NAIVE_LONGEST_QUEUE_30",
+        "candidate_description": "Naive longest-queue reassignment: Counter 5 (C5) reassigned to service 1 for 30m",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 384.4842,
+        "std_total_waiting_person_minutes": 120.6142,
+        "standard_error": 12.0614,
+        "min_total_waiting_person_minutes": 162.0618,
+        "max_total_waiting_person_minutes": 665.8166,
+        "mean_avg_waiting_time_minutes": 11.6355,
+        "p90_waiting_time_minutes": 23.7894,
+        "overall_max_waiting_time_minutes": 39.7031,
+        "mean_customers_served": 26.83,
+        "mean_unserved_count": 5.4,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 322.5922,
+            "mean_avg_wait_minutes": 17.8774,
+            "p90_wait_minutes": 26.2466,
+            "mean_served": 14.4,
+            "mean_unserved": 4.62
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 14.6708,
+            "mean_avg_wait_minutes": 2.2844,
+            "p90_wait_minutes": 10.7052,
+            "mean_served": 4.55,
+            "mean_unserved": 0.31
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 47.2212,
+            "mean_avg_wait_minutes": 4.9144,
+            "p90_wait_minutes": 13.9163,
+            "mean_served": 7.88,
+            "mean_unserved": 0.47
+          }
+        }
+      },
+      "naive_15": {
+        "policy_type": "NAIVE",
+        "candidate_id": "NAIVE_LONGEST_QUEUE_15",
+        "candidate_description": "Naive longest-queue reassignment: Counter 5 (C5) reassigned to service 1 for 15m",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 405.2477,
+        "std_total_waiting_person_minutes": 120.5598,
+        "standard_error": 12.056,
+        "min_total_waiting_person_minutes": 162.0618,
+        "max_total_waiting_person_minutes": 670.8846,
+        "mean_avg_waiting_time_minutes": 11.7576,
+        "p90_waiting_time_minutes": 27.0011,
+        "overall_max_waiting_time_minutes": 44.3426,
+        "mean_customers_served": 25.89,
+        "mean_unserved_count": 6.44,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 358.5355,
+            "mean_avg_wait_minutes": 20.0463,
+            "p90_wait_minutes": 30.3464,
+            "mean_served": 13.12,
+            "mean_unserved": 5.86
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 14.669,
+            "mean_avg_wait_minutes": 2.2513,
+            "p90_wait_minutes": 10.0444,
+            "mean_served": 4.56,
+            "mean_unserved": 0.32
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 32.0433,
+            "mean_avg_wait_minutes": 3.2247,
+            "p90_wait_minutes": 11.0883,
+            "mean_served": 8.21,
+            "mean_unserved": 0.26
+          }
+        }
+      },
+      "pravaah": {
+        "policy_type": "OPTIMIZED",
+        "candidate_id": "CAND_C3_TO_S1_D30",
+        "candidate_description": "Reassign Counter 3 (C3) from Service 2 (queue=1) to Service 1 (queue=8) for 30m",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 381.2369,
+        "std_total_waiting_person_minutes": 121.3866,
+        "standard_error": 12.1387,
+        "min_total_waiting_person_minutes": 154.6591,
+        "max_total_waiting_person_minutes": 675.6988,
+        "mean_avg_waiting_time_minutes": 11.5101,
+        "p90_waiting_time_minutes": 24.7555,
+        "overall_max_waiting_time_minutes": 39.9176,
+        "mean_customers_served": 26.45,
+        "mean_unserved_count": 5.66,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 324.8422,
+            "mean_avg_wait_minutes": 17.9536,
+            "p90_wait_minutes": 26.9135,
+            "mean_served": 14.37,
+            "mean_unserved": 4.65
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 46.5046,
+            "mean_avg_wait_minutes": 8.8587,
+            "p90_wait_minutes": 24.7203,
+            "mean_served": 3.77,
+            "mean_unserved": 0.83
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 9.89,
+            "mean_avg_wait_minutes": 0.9468,
+            "p90_wait_minutes": 3.655,
+            "mean_served": 8.31,
+            "mean_unserved": 0.18
+          }
+        }
+      },
+      "selected_policy": "OPTIMIZED",
+      "selected_candidate_id": "CAND_C3_TO_S1_D30",
+      "selected_action_description": "Reassign Counter 3 (C3) from Service 2 (queue=1) to Service 1 (queue=8) for 30m",
+      "pravaah_decision_info": {
+        "selected_candidate_id": "CAND_C3_TO_S1_D30",
+        "selected_policy": "OPTIMIZED",
+        "decision_replications": 100,
+        "decision_mean_wait": 366.6181,
+        "decision_margin": {
+          "condition_a_10pct_passed": true,
+          "relative_improvement": 0.194,
+          "pct_improvement": 19.4,
+          "condition_b_70pct_wins_passed": true,
+          "decision_wins": 98,
+          "decision_win_rate": 0.98,
+          "best_candidate_id": "CAND_C3_TO_S1_D30",
+          "decision_notes": [
+            "Selected feasible candidate CAND_C3_TO_S1_D30: 10% margin passed (19.40% >= 10.0%), 70% win-rate passed (98/100 = 98.0%)."
+          ]
+        },
+        "is_feasible": true,
+        "decision_notes": [
+          "Selected feasible candidate CAND_C3_TO_S1_D30: 10% margin passed (19.40% >= 10.0%), 70% win-rate passed (98/100 = 98.0%)."
+        ]
+      },
+      "vs_baseline": {
+        "comparison_name": "PRAVAAH vs Baseline",
+        "mean_difference": 88.336,
+        "standard_error": 3.5135,
+        "ci_95": [
+          81.3646,
+          95.3074
+        ],
+        "win_count": 100,
+        "loss_count": 0,
+        "tie_count": 0,
+        "win_rate": 1.0
+      },
+      "vs_naive_30": {
+        "comparison_name": "PRAVAAH vs Naive-30",
+        "mean_difference": 3.2473,
+        "standard_error": 5.2767,
+        "ci_95": [
+          -7.2228,
+          13.7174
+        ],
+        "win_count": 48,
+        "loss_count": 52,
+        "tie_count": 0,
+        "win_rate": 0.48
+      },
+      "vs_naive_15": {
+        "comparison_name": "PRAVAAH vs Naive-15",
+        "mean_difference": 24.0108,
+        "standard_error": 4.7616,
+        "ci_95": [
+          14.5628,
+          33.4589
+        ],
+        "win_count": 69,
+        "loss_count": 31,
+        "tie_count": 0,
+        "win_rate": 0.69
+      },
+      "naive_30_vs_baseline": {
+        "comparison_name": "Naive-30 vs Baseline",
+        "mean_difference": 85.0887,
+        "standard_error": 5.0565,
+        "ci_95": [
+          75.0556,
+          95.1218
+        ],
+        "win_count": 94,
+        "loss_count": 6,
+        "tie_count": 0,
+        "win_rate": 0.94
+      },
+      "improvement_vs_baseline_person_min": 88.336,
+      "pct_improvement_vs_baseline": 18.81,
+      "improvement_vs_naive_person_min": 3.2473,
+      "pct_improvement_vs_naive": 0.84,
+      "pravaah_beats_baseline": true,
+      "pravaah_beats_naive": true,
+      "pravaah_beats_naive_30": true,
+      "pravaah_beats_naive_15": true,
+      "naive_15_beats_naive_30": false,
+      "observations": [
+        "PRAVAAH outperformed Naive-30 by 3.25 person-min (95% CI: [-7.22, 13.72])."
+      ]
+    },
+    "scenario_c_donor_constraint": {
+      "scenario_id": "scenario_c_donor_constraint",
+      "scenario_name": "Scenario C: Donor Capacity Constraint",
+      "office_code": "MUNI",
+      "horizon_minutes": 60.0,
+      "decision_replications": 100,
+      "evaluation_replications": 100,
+      "baseline": {
+        "policy_type": "BASELINE",
+        "candidate_id": null,
+        "candidate_description": "No counter reassignment (Baseline)",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 600.1691,
+        "std_total_waiting_person_minutes": 143.6676,
+        "standard_error": 14.3668,
+        "min_total_waiting_person_minutes": 309.4809,
+        "max_total_waiting_person_minutes": 957.3632,
+        "mean_avg_waiting_time_minutes": 15.4354,
+        "p90_waiting_time_minutes": 34.187,
+        "overall_max_waiting_time_minutes": 48.0277,
+        "mean_customers_served": 25.93,
+        "mean_unserved_count": 10.6,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 442.1918,
+            "mean_avg_wait_minutes": 25.793,
+            "p90_wait_minutes": 37.1976,
+            "mean_served": 11.25,
+            "mean_unserved": 7.71
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 150.2554,
+            "mean_avg_wait_minutes": 15.0709,
+            "p90_wait_minutes": 29.0297,
+            "mean_served": 6.82,
+            "mean_unserved": 2.78
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 7.7219,
+            "mean_avg_wait_minutes": 0.8071,
+            "p90_wait_minutes": 2.9867,
+            "mean_served": 7.86,
+            "mean_unserved": 0.11
+          }
+        }
+      },
+      "naive": {
+        "policy_type": "NAIVE",
+        "candidate_id": "NAIVE_LONGEST_QUEUE_30",
+        "candidate_description": "Naive longest-queue reassignment: Counter 5 (C5) reassigned to service 1 for 30m",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 509.0366,
+        "std_total_waiting_person_minutes": 140.4287,
+        "standard_error": 14.0429,
+        "min_total_waiting_person_minutes": 236.0327,
+        "max_total_waiting_person_minutes": 864.0043,
+        "mean_avg_waiting_time_minutes": 13.8098,
+        "p90_waiting_time_minutes": 25.343,
+        "overall_max_waiting_time_minutes": 42.827,
+        "mean_customers_served": 29.08,
+        "mean_unserved_count": 7.34,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 317.9217,
+            "mean_avg_wait_minutes": 17.7642,
+            "p90_wait_minutes": 25.2353,
+            "mean_served": 14.59,
+            "mean_unserved": 4.43
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 151.1582,
+            "mean_avg_wait_minutes": 15.216,
+            "p90_wait_minutes": 30.0172,
+            "mean_served": 6.92,
+            "mean_unserved": 2.66
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 39.9568,
+            "mean_avg_wait_minutes": 4.4499,
+            "p90_wait_minutes": 13.7237,
+            "mean_served": 7.57,
+            "mean_unserved": 0.25
+          }
+        }
+      },
+      "naive_30": {
+        "policy_type": "NAIVE",
+        "candidate_id": "NAIVE_LONGEST_QUEUE_30",
+        "candidate_description": "Naive longest-queue reassignment: Counter 5 (C5) reassigned to service 1 for 30m",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 509.0366,
+        "std_total_waiting_person_minutes": 140.4287,
+        "standard_error": 14.0429,
+        "min_total_waiting_person_minutes": 236.0327,
+        "max_total_waiting_person_minutes": 864.0043,
+        "mean_avg_waiting_time_minutes": 13.8098,
+        "p90_waiting_time_minutes": 25.343,
+        "overall_max_waiting_time_minutes": 42.827,
+        "mean_customers_served": 29.08,
+        "mean_unserved_count": 7.34,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 317.9217,
+            "mean_avg_wait_minutes": 17.7642,
+            "p90_wait_minutes": 25.2353,
+            "mean_served": 14.59,
+            "mean_unserved": 4.43
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 151.1582,
+            "mean_avg_wait_minutes": 15.216,
+            "p90_wait_minutes": 30.0172,
+            "mean_served": 6.92,
+            "mean_unserved": 2.66
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 39.9568,
+            "mean_avg_wait_minutes": 4.4499,
+            "p90_wait_minutes": 13.7237,
+            "mean_served": 7.57,
+            "mean_unserved": 0.25
+          }
+        }
+      },
+      "naive_15": {
+        "policy_type": "NAIVE",
+        "candidate_id": "NAIVE_LONGEST_QUEUE_15",
+        "candidate_description": "Naive longest-queue reassignment: Counter 5 (C5) reassigned to service 1 for 15m",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 532.5771,
+        "std_total_waiting_person_minutes": 145.4794,
+        "standard_error": 14.5479,
+        "min_total_waiting_person_minutes": 252.0084,
+        "max_total_waiting_person_minutes": 896.7261,
+        "mean_avg_waiting_time_minutes": 13.9564,
+        "p90_waiting_time_minutes": 28.0129,
+        "overall_max_waiting_time_minutes": 49.3082,
+        "mean_customers_served": 27.82,
+        "mean_unserved_count": 8.74,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 354.5789,
+            "mean_avg_wait_minutes": 19.8319,
+            "p90_wait_minutes": 29.5632,
+            "mean_served": 13.18,
+            "mean_unserved": 5.8
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 151.4255,
+            "mean_avg_wait_minutes": 15.0782,
+            "p90_wait_minutes": 29.5276,
+            "mean_served": 6.79,
+            "mean_unserved": 2.81
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 26.5727,
+            "mean_avg_wait_minutes": 2.8889,
+            "p90_wait_minutes": 10.2471,
+            "mean_served": 7.85,
+            "mean_unserved": 0.13
+          }
+        }
+      },
+      "pravaah": {
+        "policy_type": "OPTIMIZED",
+        "candidate_id": "CAND_C5_TO_S1_D30",
+        "candidate_description": "Reassign Counter 5 (C5) from Service 3 (queue=1) to Service 1 (queue=8) for 30m",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 509.0366,
+        "std_total_waiting_person_minutes": 140.4287,
+        "standard_error": 14.0429,
+        "min_total_waiting_person_minutes": 236.0327,
+        "max_total_waiting_person_minutes": 864.0043,
+        "mean_avg_waiting_time_minutes": 13.8098,
+        "p90_waiting_time_minutes": 25.343,
+        "overall_max_waiting_time_minutes": 42.827,
+        "mean_customers_served": 29.08,
+        "mean_unserved_count": 7.34,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 317.9217,
+            "mean_avg_wait_minutes": 17.7642,
+            "p90_wait_minutes": 25.2353,
+            "mean_served": 14.59,
+            "mean_unserved": 4.43
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 151.1582,
+            "mean_avg_wait_minutes": 15.216,
+            "p90_wait_minutes": 30.0172,
+            "mean_served": 6.92,
+            "mean_unserved": 2.66
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 39.9568,
+            "mean_avg_wait_minutes": 4.4499,
+            "p90_wait_minutes": 13.7237,
+            "mean_served": 7.57,
+            "mean_unserved": 0.25
+          }
+        }
+      },
+      "selected_policy": "OPTIMIZED",
+      "selected_candidate_id": "CAND_C5_TO_S1_D30",
+      "selected_action_description": "Reassign Counter 5 (C5) from Service 3 (queue=1) to Service 1 (queue=8) for 30m",
+      "pravaah_decision_info": {
+        "selected_candidate_id": "CAND_C5_TO_S1_D30",
+        "selected_policy": "OPTIMIZED",
+        "decision_replications": 100,
+        "decision_mean_wait": 493.5977,
+        "decision_margin": {
+          "condition_a_10pct_passed": true,
+          "relative_improvement": 0.1519,
+          "pct_improvement": 15.19,
+          "condition_b_70pct_wins_passed": true,
+          "decision_wins": 97,
+          "decision_win_rate": 0.97,
+          "best_candidate_id": "CAND_C5_TO_S1_D30",
+          "decision_notes": [
+            "Selected feasible candidate CAND_C5_TO_S1_D30: 10% margin passed (15.19% >= 10.0%), 70% win-rate passed (97/100 = 97.0%)."
+          ]
+        },
+        "is_feasible": true,
+        "decision_notes": [
+          "Selected feasible candidate CAND_C5_TO_S1_D30: 10% margin passed (15.19% >= 10.0%), 70% win-rate passed (97/100 = 97.0%)."
+        ]
+      },
+      "vs_baseline": {
+        "comparison_name": "PRAVAAH vs Baseline",
+        "mean_difference": 91.1324,
+        "standard_error": 4.2192,
+        "ci_95": [
+          82.7606,
+          99.5042
+        ],
+        "win_count": 96,
+        "loss_count": 4,
+        "tie_count": 0,
+        "win_rate": 0.96
+      },
+      "vs_naive_30": {
+        "comparison_name": "PRAVAAH vs Naive-30",
+        "mean_difference": 0.0,
+        "standard_error": 0.0,
+        "ci_95": [
+          0.0,
+          0.0
+        ],
+        "win_count": 0,
+        "loss_count": 0,
+        "tie_count": 100,
+        "win_rate": 0.0
+      },
+      "vs_naive_15": {
+        "comparison_name": "PRAVAAH vs Naive-15",
+        "mean_difference": 23.5405,
+        "standard_error": 2.314,
+        "ci_95": [
+          18.949,
+          28.1319
+        ],
+        "win_count": 83,
+        "loss_count": 14,
+        "tie_count": 3,
+        "win_rate": 0.83
+      },
+      "naive_30_vs_baseline": {
+        "comparison_name": "Naive-30 vs Baseline",
+        "mean_difference": 91.1324,
+        "standard_error": 4.2192,
+        "ci_95": [
+          82.7606,
+          99.5042
+        ],
+        "win_count": 96,
+        "loss_count": 4,
+        "tie_count": 0,
+        "win_rate": 0.96
+      },
+      "improvement_vs_baseline_person_min": 91.1324,
+      "pct_improvement_vs_baseline": 15.18,
+      "improvement_vs_naive_person_min": 0.0,
+      "pct_improvement_vs_naive": 0.0,
+      "pravaah_beats_baseline": true,
+      "pravaah_beats_naive": false,
+      "pravaah_beats_naive_30": false,
+      "pravaah_beats_naive_15": true,
+      "naive_15_beats_naive_30": false,
+      "observations": [
+        "PRAVAAH tied Naive-30 in evaluated waiting person-minutes."
+      ]
+    },
+    "scenario_d_temporary_intervention": {
+      "scenario_id": "scenario_d_temporary_intervention",
+      "scenario_name": "Scenario D: Temporary Assistance and Look-Ahead Burst",
+      "office_code": "MUNI",
+      "horizon_minutes": 60.0,
+      "decision_replications": 100,
+      "evaluation_replications": 100,
+      "baseline": {
+        "policy_type": "BASELINE",
+        "candidate_id": null,
+        "candidate_description": "No counter reassignment (Baseline)",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 338.4084,
+        "std_total_waiting_person_minutes": 109.4445,
+        "standard_error": 10.9444,
+        "min_total_waiting_person_minutes": 150.7201,
+        "max_total_waiting_person_minutes": 708.1606,
+        "mean_avg_waiting_time_minutes": 9.6419,
+        "p90_waiting_time_minutes": 25.8096,
+        "overall_max_waiting_time_minutes": 44.2328,
+        "mean_customers_served": 25.72,
+        "mean_unserved_count": 7.2,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 282.3488,
+            "mean_avg_wait_minutes": 19.5477,
+            "p90_wait_minutes": 31.1378,
+            "mean_served": 10.94,
+            "mean_unserved": 3.91
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 14.6315,
+            "mean_avg_wait_minutes": 2.2324,
+            "p90_wait_minutes": 9.2634,
+            "mean_served": 4.41,
+            "mean_unserved": 0.38
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 41.4281,
+            "mean_avg_wait_minutes": 2.0753,
+            "p90_wait_minutes": 8.9165,
+            "mean_served": 10.37,
+            "mean_unserved": 2.91
+          }
+        }
+      },
+      "naive": {
+        "policy_type": "NAIVE",
+        "candidate_id": "NAIVE_LONGEST_QUEUE_30",
+        "candidate_description": "Naive longest-queue reassignment: Counter 5 (C5) reassigned to service 1 for 30m",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 274.3993,
+        "std_total_waiting_person_minutes": 100.0047,
+        "standard_error": 10.0005,
+        "min_total_waiting_person_minutes": 93.7221,
+        "max_total_waiting_person_minutes": 545.3307,
+        "mean_avg_waiting_time_minutes": 8.0253,
+        "p90_waiting_time_minutes": 16.8819,
+        "overall_max_waiting_time_minutes": 31.4379,
+        "mean_customers_served": 26.99,
+        "mean_unserved_count": 6.06,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 171.3983,
+            "mean_avg_wait_minutes": 11.1405,
+            "p90_wait_minutes": 18.8586,
+            "mean_served": 13.54,
+            "mean_unserved": 1.6
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 15.9173,
+            "mean_avg_wait_minutes": 2.3787,
+            "p90_wait_minutes": 10.5718,
+            "mean_served": 4.32,
+            "mean_unserved": 0.41
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 87.0837,
+            "mean_avg_wait_minutes": 5.7467,
+            "p90_wait_minutes": 14.2277,
+            "mean_served": 9.13,
+            "mean_unserved": 4.05
+          }
+        }
+      },
+      "naive_30": {
+        "policy_type": "NAIVE",
+        "candidate_id": "NAIVE_LONGEST_QUEUE_30",
+        "candidate_description": "Naive longest-queue reassignment: Counter 5 (C5) reassigned to service 1 for 30m",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 274.3993,
+        "std_total_waiting_person_minutes": 100.0047,
+        "standard_error": 10.0005,
+        "min_total_waiting_person_minutes": 93.7221,
+        "max_total_waiting_person_minutes": 545.3307,
+        "mean_avg_waiting_time_minutes": 8.0253,
+        "p90_waiting_time_minutes": 16.8819,
+        "overall_max_waiting_time_minutes": 31.4379,
+        "mean_customers_served": 26.99,
+        "mean_unserved_count": 6.06,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 171.3983,
+            "mean_avg_wait_minutes": 11.1405,
+            "p90_wait_minutes": 18.8586,
+            "mean_served": 13.54,
+            "mean_unserved": 1.6
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 15.9173,
+            "mean_avg_wait_minutes": 2.3787,
+            "p90_wait_minutes": 10.5718,
+            "mean_served": 4.32,
+            "mean_unserved": 0.41
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 87.0837,
+            "mean_avg_wait_minutes": 5.7467,
+            "p90_wait_minutes": 14.2277,
+            "mean_served": 9.13,
+            "mean_unserved": 4.05
+          }
+        }
+      },
+      "naive_15": {
+        "policy_type": "NAIVE",
+        "candidate_id": "NAIVE_LONGEST_QUEUE_15",
+        "candidate_description": "Naive longest-queue reassignment: Counter 5 (C5) reassigned to service 1 for 15m",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 274.3828,
+        "std_total_waiting_person_minutes": 103.4254,
+        "standard_error": 10.3425,
+        "min_total_waiting_person_minutes": 98.1369,
+        "max_total_waiting_person_minutes": 612.4319,
+        "mean_avg_waiting_time_minutes": 8.0163,
+        "p90_waiting_time_minutes": 17.732,
+        "overall_max_waiting_time_minutes": 37.1585,
+        "mean_customers_served": 27.16,
+        "mean_unserved_count": 5.75,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 196.6596,
+            "mean_avg_wait_minutes": 12.9481,
+            "p90_wait_minutes": 22.1074,
+            "mean_served": 12.83,
+            "mean_unserved": 2.13
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 15.7314,
+            "mean_avg_wait_minutes": 2.3562,
+            "p90_wait_minutes": 10.1959,
+            "mean_served": 4.27,
+            "mean_unserved": 0.42
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 61.9917,
+            "mean_avg_wait_minutes": 3.7615,
+            "p90_wait_minutes": 11.3379,
+            "mean_served": 10.06,
+            "mean_unserved": 3.2
+          }
+        }
+      },
+      "pravaah": {
+        "policy_type": "OPTIMIZED",
+        "candidate_id": "CAND_C3_TO_S1_D30",
+        "candidate_description": "Reassign Counter 3 (C3) from Service 2 (queue=1) to Service 1 (queue=6) for 30m",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 260.8647,
+        "std_total_waiting_person_minutes": 101.6652,
+        "standard_error": 10.1665,
+        "min_total_waiting_person_minutes": 94.9361,
+        "max_total_waiting_person_minutes": 633.1074,
+        "mean_avg_waiting_time_minutes": 7.6096,
+        "p90_waiting_time_minutes": 17.4483,
+        "overall_max_waiting_time_minutes": 39.6014,
+        "mean_customers_served": 27.33,
+        "mean_unserved_count": 5.61,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 176.1181,
+            "mean_avg_wait_minutes": 11.4569,
+            "p90_wait_minutes": 19.4368,
+            "mean_served": 13.31,
+            "mean_unserved": 1.77
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 43.9704,
+            "mean_avg_wait_minutes": 7.7402,
+            "p90_wait_minutes": 23.5696,
+            "mean_served": 3.75,
+            "mean_unserved": 0.85
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 40.7762,
+            "mean_avg_wait_minutes": 2.0399,
+            "p90_wait_minutes": 8.6606,
+            "mean_served": 10.27,
+            "mean_unserved": 2.99
+          }
+        }
+      },
+      "selected_policy": "OPTIMIZED",
+      "selected_candidate_id": "CAND_C3_TO_S1_D30",
+      "selected_action_description": "Reassign Counter 3 (C3) from Service 2 (queue=1) to Service 1 (queue=6) for 30m",
+      "pravaah_decision_info": {
+        "selected_candidate_id": "CAND_C3_TO_S1_D30",
+        "selected_policy": "OPTIMIZED",
+        "decision_replications": 100,
+        "decision_mean_wait": 221.1215,
+        "decision_margin": {
+          "condition_a_10pct_passed": true,
+          "relative_improvement": 0.2426,
+          "pct_improvement": 24.26,
+          "condition_b_70pct_wins_passed": true,
+          "decision_wins": 99,
+          "decision_win_rate": 0.99,
+          "best_candidate_id": "CAND_C3_TO_S1_D30",
+          "decision_notes": [
+            "Selected feasible candidate CAND_C3_TO_S1_D30: 10% margin passed (24.26% >= 10.0%), 70% win-rate passed (99/100 = 99.0%)."
+          ]
+        },
+        "is_feasible": true,
+        "decision_notes": [
+          "Selected feasible candidate CAND_C3_TO_S1_D30: 10% margin passed (24.26% >= 10.0%), 70% win-rate passed (99/100 = 99.0%)."
+        ]
+      },
+      "vs_baseline": {
+        "comparison_name": "PRAVAAH vs Baseline",
+        "mean_difference": 77.5438,
+        "standard_error": 4.0295,
+        "ci_95": [
+          69.5484,
+          85.5391
+        ],
+        "win_count": 97,
+        "loss_count": 3,
+        "tie_count": 0,
+        "win_rate": 0.97
+      },
+      "vs_naive_30": {
+        "comparison_name": "PRAVAAH vs Naive-30",
+        "mean_difference": 13.5346,
+        "standard_error": 4.9787,
+        "ci_95": [
+          3.6559,
+          23.4134
+        ],
+        "win_count": 57,
+        "loss_count": 43,
+        "tie_count": 0,
+        "win_rate": 0.57
+      },
+      "vs_naive_15": {
+        "comparison_name": "PRAVAAH vs Naive-15",
+        "mean_difference": 13.5181,
+        "standard_error": 4.2894,
+        "ci_95": [
+          5.0071,
+          22.0292
+        ],
+        "win_count": 61,
+        "loss_count": 39,
+        "tie_count": 0,
+        "win_rate": 0.61
+      },
+      "naive_30_vs_baseline": {
+        "comparison_name": "Naive-30 vs Baseline",
+        "mean_difference": 64.0091,
+        "standard_error": 4.7876,
+        "ci_95": [
+          54.5095,
+          73.5088
+        ],
+        "win_count": 93,
+        "loss_count": 7,
+        "tie_count": 0,
+        "win_rate": 0.93
+      },
+      "improvement_vs_baseline_person_min": 77.5438,
+      "pct_improvement_vs_baseline": 22.91,
+      "improvement_vs_naive_person_min": 13.5346,
+      "pct_improvement_vs_naive": 4.93,
+      "pravaah_beats_baseline": true,
+      "pravaah_beats_naive": true,
+      "pravaah_beats_naive_30": true,
+      "pravaah_beats_naive_15": true,
+      "naive_15_beats_naive_30": true,
+      "observations": [
+        "PRAVAAH outperformed Naive-30 by 13.53 person-min (95% CI: [3.66, 23.41]).",
+        "Sensitivity note: Naive-15 outperformed Naive-30 by 0.02 person-min."
+      ]
+    },
+    "scenario_e_counter_failure": {
+      "scenario_id": "scenario_e_counter_failure",
+      "scenario_name": "Scenario E: Counter Failure / Congestion",
+      "office_code": "MUNI",
+      "horizon_minutes": 60.0,
+      "decision_replications": 100,
+      "evaluation_replications": 100,
+      "baseline": {
+        "policy_type": "BASELINE",
+        "candidate_id": null,
+        "candidate_description": "No counter reassignment (Baseline)",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 141.0279,
+        "std_total_waiting_person_minutes": 88.0468,
+        "standard_error": 8.8047,
+        "min_total_waiting_person_minutes": 22.9877,
+        "max_total_waiting_person_minutes": 434.2212,
+        "mean_avg_waiting_time_minutes": 3.7229,
+        "p90_waiting_time_minutes": 17.0531,
+        "overall_max_waiting_time_minutes": 41.2262,
+        "mean_customers_served": 20.72,
+        "mean_unserved_count": 4.8,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 106.9588,
+            "mean_avg_wait_minutes": 7.4974,
+            "p90_wait_minutes": 25.0046,
+            "mean_served": 6.59,
+            "mean_unserved": 3.72
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 18.7001,
+            "mean_avg_wait_minutes": 2.5172,
+            "p90_wait_minutes": 11.2184,
+            "mean_served": 4.67,
+            "mean_unserved": 0.59
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 15.369,
+            "mean_avg_wait_minutes": 1.3024,
+            "p90_wait_minutes": 4.7766,
+            "mean_served": 9.46,
+            "mean_unserved": 0.49
+          }
+        }
+      },
+      "naive": {
+        "policy_type": "NAIVE",
+        "candidate_id": null,
+        "candidate_description": "No counter reassignment (Baseline)",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 141.0279,
+        "std_total_waiting_person_minutes": 88.0468,
+        "standard_error": 8.8047,
+        "min_total_waiting_person_minutes": 22.9877,
+        "max_total_waiting_person_minutes": 434.2212,
+        "mean_avg_waiting_time_minutes": 3.7229,
+        "p90_waiting_time_minutes": 17.0531,
+        "overall_max_waiting_time_minutes": 41.2262,
+        "mean_customers_served": 20.72,
+        "mean_unserved_count": 4.8,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 106.9588,
+            "mean_avg_wait_minutes": 7.4974,
+            "p90_wait_minutes": 25.0046,
+            "mean_served": 6.59,
+            "mean_unserved": 3.72
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 18.7001,
+            "mean_avg_wait_minutes": 2.5172,
+            "p90_wait_minutes": 11.2184,
+            "mean_served": 4.67,
+            "mean_unserved": 0.59
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 15.369,
+            "mean_avg_wait_minutes": 1.3024,
+            "p90_wait_minutes": 4.7766,
+            "mean_served": 9.46,
+            "mean_unserved": 0.49
+          }
+        }
+      },
+      "naive_30": {
+        "policy_type": "NAIVE",
+        "candidate_id": null,
+        "candidate_description": "No counter reassignment (Baseline)",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 141.0279,
+        "std_total_waiting_person_minutes": 88.0468,
+        "standard_error": 8.8047,
+        "min_total_waiting_person_minutes": 22.9877,
+        "max_total_waiting_person_minutes": 434.2212,
+        "mean_avg_waiting_time_minutes": 3.7229,
+        "p90_waiting_time_minutes": 17.0531,
+        "overall_max_waiting_time_minutes": 41.2262,
+        "mean_customers_served": 20.72,
+        "mean_unserved_count": 4.8,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 106.9588,
+            "mean_avg_wait_minutes": 7.4974,
+            "p90_wait_minutes": 25.0046,
+            "mean_served": 6.59,
+            "mean_unserved": 3.72
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 18.7001,
+            "mean_avg_wait_minutes": 2.5172,
+            "p90_wait_minutes": 11.2184,
+            "mean_served": 4.67,
+            "mean_unserved": 0.59
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 15.369,
+            "mean_avg_wait_minutes": 1.3024,
+            "p90_wait_minutes": 4.7766,
+            "mean_served": 9.46,
+            "mean_unserved": 0.49
+          }
+        }
+      },
+      "naive_15": {
+        "policy_type": "NAIVE",
+        "candidate_id": null,
+        "candidate_description": "No counter reassignment (Baseline)",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 141.0279,
+        "std_total_waiting_person_minutes": 88.0468,
+        "standard_error": 8.8047,
+        "min_total_waiting_person_minutes": 22.9877,
+        "max_total_waiting_person_minutes": 434.2212,
+        "mean_avg_waiting_time_minutes": 3.7229,
+        "p90_waiting_time_minutes": 17.0531,
+        "overall_max_waiting_time_minutes": 41.2262,
+        "mean_customers_served": 20.72,
+        "mean_unserved_count": 4.8,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 106.9588,
+            "mean_avg_wait_minutes": 7.4974,
+            "p90_wait_minutes": 25.0046,
+            "mean_served": 6.59,
+            "mean_unserved": 3.72
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 18.7001,
+            "mean_avg_wait_minutes": 2.5172,
+            "p90_wait_minutes": 11.2184,
+            "mean_served": 4.67,
+            "mean_unserved": 0.59
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 15.369,
+            "mean_avg_wait_minutes": 1.3024,
+            "p90_wait_minutes": 4.7766,
+            "mean_served": 9.46,
+            "mean_unserved": 0.49
+          }
+        }
+      },
+      "pravaah": {
+        "policy_type": "BASELINE",
+        "candidate_id": null,
+        "candidate_description": "No counter reassignment (Baseline)",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 141.0279,
+        "std_total_waiting_person_minutes": 88.0468,
+        "standard_error": 8.8047,
+        "min_total_waiting_person_minutes": 22.9877,
+        "max_total_waiting_person_minutes": 434.2212,
+        "mean_avg_waiting_time_minutes": 3.7229,
+        "p90_waiting_time_minutes": 17.0531,
+        "overall_max_waiting_time_minutes": 41.2262,
+        "mean_customers_served": 20.72,
+        "mean_unserved_count": 4.8,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 106.9588,
+            "mean_avg_wait_minutes": 7.4974,
+            "p90_wait_minutes": 25.0046,
+            "mean_served": 6.59,
+            "mean_unserved": 3.72
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 18.7001,
+            "mean_avg_wait_minutes": 2.5172,
+            "p90_wait_minutes": 11.2184,
+            "mean_served": 4.67,
+            "mean_unserved": 0.59
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 15.369,
+            "mean_avg_wait_minutes": 1.3024,
+            "p90_wait_minutes": 4.7766,
+            "mean_served": 9.46,
+            "mean_unserved": 0.49
+          }
+        }
+      },
+      "selected_policy": "BASELINE",
+      "selected_candidate_id": null,
+      "selected_action_description": "No counter reassignment (No intervention required)",
+      "pravaah_decision_info": {
+        "selected_candidate_id": null,
+        "selected_policy": "BASELINE",
+        "decision_replications": 100,
+        "decision_mean_wait": 73.7348,
+        "decision_margin": {
+          "condition_a_10pct_passed": false,
+          "relative_improvement": -0.017,
+          "pct_improvement": -1.7,
+          "condition_b_70pct_wins_passed": false,
+          "decision_wins": 40,
+          "decision_win_rate": 0.4,
+          "best_candidate_id": "CAND_C3_TO_S1_D15",
+          "decision_notes": [
+            "Failed 10% improvement margin: observed -1.70% < 10.0% required.",
+            "Failed 70% paired win-rate: observed 40/100 (40.0%) < 70.0% required."
+          ]
+        },
+        "is_feasible": true,
+        "decision_notes": [
+          "Failed 10% improvement margin: observed -1.70% < 10.0% required.",
+          "Failed 70% paired win-rate: observed 40/100 (40.0%) < 70.0% required."
+        ]
+      },
+      "vs_baseline": {
+        "comparison_name": "PRAVAAH vs Baseline",
+        "mean_difference": 0.0,
+        "standard_error": 0.0,
+        "ci_95": [
+          0.0,
+          0.0
+        ],
+        "win_count": 0,
+        "loss_count": 0,
+        "tie_count": 100,
+        "win_rate": 0.0
+      },
+      "vs_naive_30": {
+        "comparison_name": "PRAVAAH vs Naive-30",
+        "mean_difference": 0.0,
+        "standard_error": 0.0,
+        "ci_95": [
+          0.0,
+          0.0
+        ],
+        "win_count": 0,
+        "loss_count": 0,
+        "tie_count": 100,
+        "win_rate": 0.0
+      },
+      "vs_naive_15": {
+        "comparison_name": "PRAVAAH vs Naive-15",
+        "mean_difference": 0.0,
+        "standard_error": 0.0,
+        "ci_95": [
+          0.0,
+          0.0
+        ],
+        "win_count": 0,
+        "loss_count": 0,
+        "tie_count": 100,
+        "win_rate": 0.0
+      },
+      "naive_30_vs_baseline": {
+        "comparison_name": "Naive-30 vs Baseline",
+        "mean_difference": 0.0,
+        "standard_error": 0.0,
+        "ci_95": [
+          0.0,
+          0.0
+        ],
+        "win_count": 0,
+        "loss_count": 0,
+        "tie_count": 100,
+        "win_rate": 0.0
+      },
+      "improvement_vs_baseline_person_min": 0.0,
+      "pct_improvement_vs_baseline": 0.0,
+      "improvement_vs_naive_person_min": 0.0,
+      "pct_improvement_vs_naive": 0.0,
+      "pravaah_beats_baseline": false,
+      "pravaah_beats_naive": false,
+      "pravaah_beats_naive_30": false,
+      "pravaah_beats_naive_15": false,
+      "naive_15_beats_naive_30": false,
+      "observations": [
+        "PRAVAAH concluded NO INTERVENTION REQUIRED (Margin/Feasibility threshold default)."
+      ]
+    },
+    "scenario_rto_healthy": {
+      "scenario_id": "scenario_rto_healthy",
+      "scenario_name": "RTO: Healthy Operation",
+      "office_code": "RTO",
+      "horizon_minutes": 60.0,
+      "decision_replications": 100,
+      "evaluation_replications": 100,
+      "baseline": {
+        "policy_type": "BASELINE",
+        "candidate_id": null,
+        "candidate_description": "No counter reassignment (Baseline)",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 41.936,
+        "std_total_waiting_person_minutes": 44.5617,
+        "standard_error": 4.4562,
+        "min_total_waiting_person_minutes": 4.0,
+        "max_total_waiting_person_minutes": 261.385,
+        "mean_avg_waiting_time_minutes": 3.0998,
+        "p90_waiting_time_minutes": 10.9607,
+        "overall_max_waiting_time_minutes": 33.6415,
+        "mean_customers_served": 9.84,
+        "mean_unserved_count": 1.0,
+        "per_service": {
+          "4": {
+            "service_id": 4,
+            "service_code": "OT",
+            "mean_total_waiting_person_minutes": 17.0018,
+            "mean_avg_wait_minutes": 2.3489,
+            "p90_wait_minutes": 8.9088,
+            "mean_served": 5.1,
+            "mean_unserved": 0.43
+          },
+          "5": {
+            "service_id": 5,
+            "service_code": "DR",
+            "mean_total_waiting_person_minutes": 24.9342,
+            "mean_avg_wait_minutes": 3.6637,
+            "p90_wait_minutes": 12.6799,
+            "mean_served": 4.74,
+            "mean_unserved": 0.57
+          }
+        }
+      },
+      "naive": {
+        "policy_type": "NAIVE",
+        "candidate_id": null,
+        "candidate_description": "No counter reassignment (Baseline)",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 41.936,
+        "std_total_waiting_person_minutes": 44.5617,
+        "standard_error": 4.4562,
+        "min_total_waiting_person_minutes": 4.0,
+        "max_total_waiting_person_minutes": 261.385,
+        "mean_avg_waiting_time_minutes": 3.0998,
+        "p90_waiting_time_minutes": 10.9607,
+        "overall_max_waiting_time_minutes": 33.6415,
+        "mean_customers_served": 9.84,
+        "mean_unserved_count": 1.0,
+        "per_service": {
+          "4": {
+            "service_id": 4,
+            "service_code": "OT",
+            "mean_total_waiting_person_minutes": 17.0018,
+            "mean_avg_wait_minutes": 2.3489,
+            "p90_wait_minutes": 8.9088,
+            "mean_served": 5.1,
+            "mean_unserved": 0.43
+          },
+          "5": {
+            "service_id": 5,
+            "service_code": "DR",
+            "mean_total_waiting_person_minutes": 24.9342,
+            "mean_avg_wait_minutes": 3.6637,
+            "p90_wait_minutes": 12.6799,
+            "mean_served": 4.74,
+            "mean_unserved": 0.57
+          }
+        }
+      },
+      "naive_30": {
+        "policy_type": "NAIVE",
+        "candidate_id": null,
+        "candidate_description": "No counter reassignment (Baseline)",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 41.936,
+        "std_total_waiting_person_minutes": 44.5617,
+        "standard_error": 4.4562,
+        "min_total_waiting_person_minutes": 4.0,
+        "max_total_waiting_person_minutes": 261.385,
+        "mean_avg_waiting_time_minutes": 3.0998,
+        "p90_waiting_time_minutes": 10.9607,
+        "overall_max_waiting_time_minutes": 33.6415,
+        "mean_customers_served": 9.84,
+        "mean_unserved_count": 1.0,
+        "per_service": {
+          "4": {
+            "service_id": 4,
+            "service_code": "OT",
+            "mean_total_waiting_person_minutes": 17.0018,
+            "mean_avg_wait_minutes": 2.3489,
+            "p90_wait_minutes": 8.9088,
+            "mean_served": 5.1,
+            "mean_unserved": 0.43
+          },
+          "5": {
+            "service_id": 5,
+            "service_code": "DR",
+            "mean_total_waiting_person_minutes": 24.9342,
+            "mean_avg_wait_minutes": 3.6637,
+            "p90_wait_minutes": 12.6799,
+            "mean_served": 4.74,
+            "mean_unserved": 0.57
+          }
+        }
+      },
+      "naive_15": {
+        "policy_type": "NAIVE",
+        "candidate_id": null,
+        "candidate_description": "No counter reassignment (Baseline)",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 41.936,
+        "std_total_waiting_person_minutes": 44.5617,
+        "standard_error": 4.4562,
+        "min_total_waiting_person_minutes": 4.0,
+        "max_total_waiting_person_minutes": 261.385,
+        "mean_avg_waiting_time_minutes": 3.0998,
+        "p90_waiting_time_minutes": 10.9607,
+        "overall_max_waiting_time_minutes": 33.6415,
+        "mean_customers_served": 9.84,
+        "mean_unserved_count": 1.0,
+        "per_service": {
+          "4": {
+            "service_id": 4,
+            "service_code": "OT",
+            "mean_total_waiting_person_minutes": 17.0018,
+            "mean_avg_wait_minutes": 2.3489,
+            "p90_wait_minutes": 8.9088,
+            "mean_served": 5.1,
+            "mean_unserved": 0.43
+          },
+          "5": {
+            "service_id": 5,
+            "service_code": "DR",
+            "mean_total_waiting_person_minutes": 24.9342,
+            "mean_avg_wait_minutes": 3.6637,
+            "p90_wait_minutes": 12.6799,
+            "mean_served": 4.74,
+            "mean_unserved": 0.57
+          }
+        }
+      },
+      "pravaah": {
+        "policy_type": "BASELINE",
+        "candidate_id": null,
+        "candidate_description": "No counter reassignment (Baseline)",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 41.936,
+        "std_total_waiting_person_minutes": 44.5617,
+        "standard_error": 4.4562,
+        "min_total_waiting_person_minutes": 4.0,
+        "max_total_waiting_person_minutes": 261.385,
+        "mean_avg_waiting_time_minutes": 3.0998,
+        "p90_waiting_time_minutes": 10.9607,
+        "overall_max_waiting_time_minutes": 33.6415,
+        "mean_customers_served": 9.84,
+        "mean_unserved_count": 1.0,
+        "per_service": {
+          "4": {
+            "service_id": 4,
+            "service_code": "OT",
+            "mean_total_waiting_person_minutes": 17.0018,
+            "mean_avg_wait_minutes": 2.3489,
+            "p90_wait_minutes": 8.9088,
+            "mean_served": 5.1,
+            "mean_unserved": 0.43
+          },
+          "5": {
+            "service_id": 5,
+            "service_code": "DR",
+            "mean_total_waiting_person_minutes": 24.9342,
+            "mean_avg_wait_minutes": 3.6637,
+            "p90_wait_minutes": 12.6799,
+            "mean_served": 4.74,
+            "mean_unserved": 0.57
+          }
+        }
+      },
+      "selected_policy": "BASELINE",
+      "selected_candidate_id": null,
+      "selected_action_description": "No counter reassignment (No intervention required)",
+      "pravaah_decision_info": {
+        "selected_candidate_id": null,
+        "selected_policy": "BASELINE",
+        "decision_replications": 100,
+        "decision_mean_wait": 37.6733,
+        "decision_margin": {
+          "condition_a_10pct_passed": false,
+          "relative_improvement": -0.2403,
+          "pct_improvement": -24.03,
+          "condition_b_70pct_wins_passed": false,
+          "decision_wins": 34,
+          "decision_win_rate": 0.34,
+          "best_candidate_id": "CAND_C202_TO_S5_D15",
+          "decision_notes": [
+            "Failed 10% improvement margin: observed -24.03% < 10.0% required.",
+            "Failed 70% paired win-rate: observed 34/100 (34.0%) < 70.0% required."
+          ]
+        },
+        "is_feasible": true,
+        "decision_notes": [
+          "Failed 10% improvement margin: observed -24.03% < 10.0% required.",
+          "Failed 70% paired win-rate: observed 34/100 (34.0%) < 70.0% required."
+        ]
+      },
+      "vs_baseline": {
+        "comparison_name": "PRAVAAH vs Baseline",
+        "mean_difference": 0.0,
+        "standard_error": 0.0,
+        "ci_95": [
+          0.0,
+          0.0
+        ],
+        "win_count": 0,
+        "loss_count": 0,
+        "tie_count": 100,
+        "win_rate": 0.0
+      },
+      "vs_naive_30": {
+        "comparison_name": "PRAVAAH vs Naive-30",
+        "mean_difference": 0.0,
+        "standard_error": 0.0,
+        "ci_95": [
+          0.0,
+          0.0
+        ],
+        "win_count": 0,
+        "loss_count": 0,
+        "tie_count": 100,
+        "win_rate": 0.0
+      },
+      "vs_naive_15": {
+        "comparison_name": "PRAVAAH vs Naive-15",
+        "mean_difference": 0.0,
+        "standard_error": 0.0,
+        "ci_95": [
+          0.0,
+          0.0
+        ],
+        "win_count": 0,
+        "loss_count": 0,
+        "tie_count": 100,
+        "win_rate": 0.0
+      },
+      "naive_30_vs_baseline": {
+        "comparison_name": "Naive-30 vs Baseline",
+        "mean_difference": 0.0,
+        "standard_error": 0.0,
+        "ci_95": [
+          0.0,
+          0.0
+        ],
+        "win_count": 0,
+        "loss_count": 0,
+        "tie_count": 100,
+        "win_rate": 0.0
+      },
+      "improvement_vs_baseline_person_min": 0.0,
+      "pct_improvement_vs_baseline": 0.0,
+      "improvement_vs_naive_person_min": 0.0,
+      "pct_improvement_vs_naive": 0.0,
+      "pravaah_beats_baseline": false,
+      "pravaah_beats_naive": false,
+      "pravaah_beats_naive_30": false,
+      "pravaah_beats_naive_15": false,
+      "naive_15_beats_naive_30": false,
+      "observations": [
+        "PRAVAAH concluded NO INTERVENTION REQUIRED (Margin/Feasibility threshold default)."
+      ]
+    },
+    "scenario_d_announced": {
+      "scenario_id": "scenario_d_announced",
+      "scenario_name": "Scenario D (Announced): Announced Look-Ahead Burst",
+      "office_code": "MUNI",
+      "horizon_minutes": 60.0,
+      "decision_replications": 100,
+      "evaluation_replications": 100,
+      "baseline": {
+        "policy_type": "BASELINE",
+        "candidate_id": null,
+        "candidate_description": "No counter reassignment (Baseline)",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 338.4084,
+        "std_total_waiting_person_minutes": 109.4445,
+        "standard_error": 10.9444,
+        "min_total_waiting_person_minutes": 150.7201,
+        "max_total_waiting_person_minutes": 708.1606,
+        "mean_avg_waiting_time_minutes": 9.6419,
+        "p90_waiting_time_minutes": 25.8096,
+        "overall_max_waiting_time_minutes": 44.2328,
+        "mean_customers_served": 25.72,
+        "mean_unserved_count": 7.2,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 282.3488,
+            "mean_avg_wait_minutes": 19.5477,
+            "p90_wait_minutes": 31.1378,
+            "mean_served": 10.94,
+            "mean_unserved": 3.91
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 14.6315,
+            "mean_avg_wait_minutes": 2.2324,
+            "p90_wait_minutes": 9.2634,
+            "mean_served": 4.41,
+            "mean_unserved": 0.38
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 41.4281,
+            "mean_avg_wait_minutes": 2.0753,
+            "p90_wait_minutes": 8.9165,
+            "mean_served": 10.37,
+            "mean_unserved": 2.91
+          }
+        }
+      },
+      "naive": {
+        "policy_type": "NAIVE",
+        "candidate_id": "NAIVE_LONGEST_QUEUE_30",
+        "candidate_description": "Naive longest-queue reassignment: Counter 5 (C5) reassigned to service 1 for 30m",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 274.3993,
+        "std_total_waiting_person_minutes": 100.0047,
+        "standard_error": 10.0005,
+        "min_total_waiting_person_minutes": 93.7221,
+        "max_total_waiting_person_minutes": 545.3307,
+        "mean_avg_waiting_time_minutes": 8.0253,
+        "p90_waiting_time_minutes": 16.8819,
+        "overall_max_waiting_time_minutes": 31.4379,
+        "mean_customers_served": 26.99,
+        "mean_unserved_count": 6.06,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 171.3983,
+            "mean_avg_wait_minutes": 11.1405,
+            "p90_wait_minutes": 18.8586,
+            "mean_served": 13.54,
+            "mean_unserved": 1.6
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 15.9173,
+            "mean_avg_wait_minutes": 2.3787,
+            "p90_wait_minutes": 10.5718,
+            "mean_served": 4.32,
+            "mean_unserved": 0.41
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 87.0837,
+            "mean_avg_wait_minutes": 5.7467,
+            "p90_wait_minutes": 14.2277,
+            "mean_served": 9.13,
+            "mean_unserved": 4.05
+          }
+        }
+      },
+      "naive_30": {
+        "policy_type": "NAIVE",
+        "candidate_id": "NAIVE_LONGEST_QUEUE_30",
+        "candidate_description": "Naive longest-queue reassignment: Counter 5 (C5) reassigned to service 1 for 30m",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 274.3993,
+        "std_total_waiting_person_minutes": 100.0047,
+        "standard_error": 10.0005,
+        "min_total_waiting_person_minutes": 93.7221,
+        "max_total_waiting_person_minutes": 545.3307,
+        "mean_avg_waiting_time_minutes": 8.0253,
+        "p90_waiting_time_minutes": 16.8819,
+        "overall_max_waiting_time_minutes": 31.4379,
+        "mean_customers_served": 26.99,
+        "mean_unserved_count": 6.06,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 171.3983,
+            "mean_avg_wait_minutes": 11.1405,
+            "p90_wait_minutes": 18.8586,
+            "mean_served": 13.54,
+            "mean_unserved": 1.6
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 15.9173,
+            "mean_avg_wait_minutes": 2.3787,
+            "p90_wait_minutes": 10.5718,
+            "mean_served": 4.32,
+            "mean_unserved": 0.41
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 87.0837,
+            "mean_avg_wait_minutes": 5.7467,
+            "p90_wait_minutes": 14.2277,
+            "mean_served": 9.13,
+            "mean_unserved": 4.05
+          }
+        }
+      },
+      "naive_15": {
+        "policy_type": "NAIVE",
+        "candidate_id": "NAIVE_LONGEST_QUEUE_15",
+        "candidate_description": "Naive longest-queue reassignment: Counter 5 (C5) reassigned to service 1 for 15m",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 274.3828,
+        "std_total_waiting_person_minutes": 103.4254,
+        "standard_error": 10.3425,
+        "min_total_waiting_person_minutes": 98.1369,
+        "max_total_waiting_person_minutes": 612.4319,
+        "mean_avg_waiting_time_minutes": 8.0163,
+        "p90_waiting_time_minutes": 17.732,
+        "overall_max_waiting_time_minutes": 37.1585,
+        "mean_customers_served": 27.16,
+        "mean_unserved_count": 5.75,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 196.6596,
+            "mean_avg_wait_minutes": 12.9481,
+            "p90_wait_minutes": 22.1074,
+            "mean_served": 12.83,
+            "mean_unserved": 2.13
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 15.7314,
+            "mean_avg_wait_minutes": 2.3562,
+            "p90_wait_minutes": 10.1959,
+            "mean_served": 4.27,
+            "mean_unserved": 0.42
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 61.9917,
+            "mean_avg_wait_minutes": 3.7615,
+            "p90_wait_minutes": 11.3379,
+            "mean_served": 10.06,
+            "mean_unserved": 3.2
+          }
+        }
+      },
+      "pravaah": {
+        "policy_type": "OPTIMIZED",
+        "candidate_id": "CAND_C3_TO_S1_D30",
+        "candidate_description": "Reassign Counter 3 (C3) from Service 2 (queue=1) to Service 1 (queue=6) for 30m",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 260.8647,
+        "std_total_waiting_person_minutes": 101.6652,
+        "standard_error": 10.1665,
+        "min_total_waiting_person_minutes": 94.9361,
+        "max_total_waiting_person_minutes": 633.1074,
+        "mean_avg_waiting_time_minutes": 7.6096,
+        "p90_waiting_time_minutes": 17.4483,
+        "overall_max_waiting_time_minutes": 39.6014,
+        "mean_customers_served": 27.33,
+        "mean_unserved_count": 5.61,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 176.1181,
+            "mean_avg_wait_minutes": 11.4569,
+            "p90_wait_minutes": 19.4368,
+            "mean_served": 13.31,
+            "mean_unserved": 1.77
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 43.9704,
+            "mean_avg_wait_minutes": 7.7402,
+            "p90_wait_minutes": 23.5696,
+            "mean_served": 3.75,
+            "mean_unserved": 0.85
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 40.7762,
+            "mean_avg_wait_minutes": 2.0399,
+            "p90_wait_minutes": 8.6606,
+            "mean_served": 10.27,
+            "mean_unserved": 2.99
+          }
+        }
+      },
+      "selected_policy": "OPTIMIZED",
+      "selected_candidate_id": "CAND_C3_TO_S1_D30",
+      "selected_action_description": "Reassign Counter 3 (C3) from Service 2 (queue=1) to Service 1 (queue=6) for 30m",
+      "pravaah_decision_info": {
+        "selected_candidate_id": "CAND_C3_TO_S1_D30",
+        "selected_policy": "OPTIMIZED",
+        "decision_replications": 100,
+        "decision_mean_wait": 247.0468,
+        "decision_margin": {
+          "condition_a_10pct_passed": true,
+          "relative_improvement": 0.2347,
+          "pct_improvement": 23.47,
+          "condition_b_70pct_wins_passed": true,
+          "decision_wins": 96,
+          "decision_win_rate": 0.96,
+          "best_candidate_id": "CAND_C3_TO_S1_D30",
+          "decision_notes": [
+            "Selected feasible candidate CAND_C3_TO_S1_D30: 10% margin passed (23.47% >= 10.0%), 70% win-rate passed (96/100 = 96.0%)."
+          ]
+        },
+        "is_feasible": true,
+        "decision_notes": [
+          "Selected feasible candidate CAND_C3_TO_S1_D30: 10% margin passed (23.47% >= 10.0%), 70% win-rate passed (96/100 = 96.0%)."
+        ]
+      },
+      "vs_baseline": {
+        "comparison_name": "PRAVAAH vs Baseline",
+        "mean_difference": 77.5438,
+        "standard_error": 4.0295,
+        "ci_95": [
+          69.5484,
+          85.5391
+        ],
+        "win_count": 97,
+        "loss_count": 3,
+        "tie_count": 0,
+        "win_rate": 0.97
+      },
+      "vs_naive_30": {
+        "comparison_name": "PRAVAAH vs Naive-30",
+        "mean_difference": 13.5346,
+        "standard_error": 4.9787,
+        "ci_95": [
+          3.6559,
+          23.4134
+        ],
+        "win_count": 57,
+        "loss_count": 43,
+        "tie_count": 0,
+        "win_rate": 0.57
+      },
+      "vs_naive_15": {
+        "comparison_name": "PRAVAAH vs Naive-15",
+        "mean_difference": 13.5181,
+        "standard_error": 4.2894,
+        "ci_95": [
+          5.0071,
+          22.0292
+        ],
+        "win_count": 61,
+        "loss_count": 39,
+        "tie_count": 0,
+        "win_rate": 0.61
+      },
+      "naive_30_vs_baseline": {
+        "comparison_name": "Naive-30 vs Baseline",
+        "mean_difference": 64.0091,
+        "standard_error": 4.7876,
+        "ci_95": [
+          54.5095,
+          73.5088
+        ],
+        "win_count": 93,
+        "loss_count": 7,
+        "tie_count": 0,
+        "win_rate": 0.93
+      },
+      "improvement_vs_baseline_person_min": 77.5438,
+      "pct_improvement_vs_baseline": 22.91,
+      "improvement_vs_naive_person_min": 13.5346,
+      "pct_improvement_vs_naive": 4.93,
+      "pravaah_beats_baseline": true,
+      "pravaah_beats_naive": true,
+      "pravaah_beats_naive_30": true,
+      "pravaah_beats_naive_15": true,
+      "naive_15_beats_naive_30": true,
+      "observations": [
+        "PRAVAAH outperformed Naive-30 by 13.53 person-min (95% CI: [3.66, 23.41]).",
+        "Sensitivity note: Naive-15 outperformed Naive-30 by 0.02 person-min."
+      ]
+    },
+    "scenario_d_unannounced": {
+      "scenario_id": "scenario_d_unannounced",
+      "scenario_name": "Scenario D (Unannounced): Unannounced Look-Ahead Burst",
+      "office_code": "MUNI",
+      "horizon_minutes": 60.0,
+      "decision_replications": 100,
+      "evaluation_replications": 100,
+      "baseline": {
+        "policy_type": "BASELINE",
+        "candidate_id": null,
+        "candidate_description": "No counter reassignment (Baseline)",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 338.4084,
+        "std_total_waiting_person_minutes": 109.4445,
+        "standard_error": 10.9444,
+        "min_total_waiting_person_minutes": 150.7201,
+        "max_total_waiting_person_minutes": 708.1606,
+        "mean_avg_waiting_time_minutes": 9.6419,
+        "p90_waiting_time_minutes": 25.8096,
+        "overall_max_waiting_time_minutes": 44.2328,
+        "mean_customers_served": 25.72,
+        "mean_unserved_count": 7.2,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 282.3488,
+            "mean_avg_wait_minutes": 19.5477,
+            "p90_wait_minutes": 31.1378,
+            "mean_served": 10.94,
+            "mean_unserved": 3.91
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 14.6315,
+            "mean_avg_wait_minutes": 2.2324,
+            "p90_wait_minutes": 9.2634,
+            "mean_served": 4.41,
+            "mean_unserved": 0.38
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 41.4281,
+            "mean_avg_wait_minutes": 2.0753,
+            "p90_wait_minutes": 8.9165,
+            "mean_served": 10.37,
+            "mean_unserved": 2.91
+          }
+        }
+      },
+      "naive": {
+        "policy_type": "NAIVE",
+        "candidate_id": "NAIVE_LONGEST_QUEUE_30",
+        "candidate_description": "Naive longest-queue reassignment: Counter 5 (C5) reassigned to service 1 for 30m",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 274.3993,
+        "std_total_waiting_person_minutes": 100.0047,
+        "standard_error": 10.0005,
+        "min_total_waiting_person_minutes": 93.7221,
+        "max_total_waiting_person_minutes": 545.3307,
+        "mean_avg_waiting_time_minutes": 8.0253,
+        "p90_waiting_time_minutes": 16.8819,
+        "overall_max_waiting_time_minutes": 31.4379,
+        "mean_customers_served": 26.99,
+        "mean_unserved_count": 6.06,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 171.3983,
+            "mean_avg_wait_minutes": 11.1405,
+            "p90_wait_minutes": 18.8586,
+            "mean_served": 13.54,
+            "mean_unserved": 1.6
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 15.9173,
+            "mean_avg_wait_minutes": 2.3787,
+            "p90_wait_minutes": 10.5718,
+            "mean_served": 4.32,
+            "mean_unserved": 0.41
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 87.0837,
+            "mean_avg_wait_minutes": 5.7467,
+            "p90_wait_minutes": 14.2277,
+            "mean_served": 9.13,
+            "mean_unserved": 4.05
+          }
+        }
+      },
+      "naive_30": {
+        "policy_type": "NAIVE",
+        "candidate_id": "NAIVE_LONGEST_QUEUE_30",
+        "candidate_description": "Naive longest-queue reassignment: Counter 5 (C5) reassigned to service 1 for 30m",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 274.3993,
+        "std_total_waiting_person_minutes": 100.0047,
+        "standard_error": 10.0005,
+        "min_total_waiting_person_minutes": 93.7221,
+        "max_total_waiting_person_minutes": 545.3307,
+        "mean_avg_waiting_time_minutes": 8.0253,
+        "p90_waiting_time_minutes": 16.8819,
+        "overall_max_waiting_time_minutes": 31.4379,
+        "mean_customers_served": 26.99,
+        "mean_unserved_count": 6.06,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 171.3983,
+            "mean_avg_wait_minutes": 11.1405,
+            "p90_wait_minutes": 18.8586,
+            "mean_served": 13.54,
+            "mean_unserved": 1.6
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 15.9173,
+            "mean_avg_wait_minutes": 2.3787,
+            "p90_wait_minutes": 10.5718,
+            "mean_served": 4.32,
+            "mean_unserved": 0.41
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 87.0837,
+            "mean_avg_wait_minutes": 5.7467,
+            "p90_wait_minutes": 14.2277,
+            "mean_served": 9.13,
+            "mean_unserved": 4.05
+          }
+        }
+      },
+      "naive_15": {
+        "policy_type": "NAIVE",
+        "candidate_id": "NAIVE_LONGEST_QUEUE_15",
+        "candidate_description": "Naive longest-queue reassignment: Counter 5 (C5) reassigned to service 1 for 15m",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 274.3828,
+        "std_total_waiting_person_minutes": 103.4254,
+        "standard_error": 10.3425,
+        "min_total_waiting_person_minutes": 98.1369,
+        "max_total_waiting_person_minutes": 612.4319,
+        "mean_avg_waiting_time_minutes": 8.0163,
+        "p90_waiting_time_minutes": 17.732,
+        "overall_max_waiting_time_minutes": 37.1585,
+        "mean_customers_served": 27.16,
+        "mean_unserved_count": 5.75,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 196.6596,
+            "mean_avg_wait_minutes": 12.9481,
+            "p90_wait_minutes": 22.1074,
+            "mean_served": 12.83,
+            "mean_unserved": 2.13
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 15.7314,
+            "mean_avg_wait_minutes": 2.3562,
+            "p90_wait_minutes": 10.1959,
+            "mean_served": 4.27,
+            "mean_unserved": 0.42
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 61.9917,
+            "mean_avg_wait_minutes": 3.7615,
+            "p90_wait_minutes": 11.3379,
+            "mean_served": 10.06,
+            "mean_unserved": 3.2
+          }
+        }
+      },
+      "pravaah": {
+        "policy_type": "OPTIMIZED",
+        "candidate_id": "CAND_C3_TO_S1_D30",
+        "candidate_description": "Reassign Counter 3 (C3) from Service 2 (queue=1) to Service 1 (queue=6) for 30m",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 260.8647,
+        "std_total_waiting_person_minutes": 101.6652,
+        "standard_error": 10.1665,
+        "min_total_waiting_person_minutes": 94.9361,
+        "max_total_waiting_person_minutes": 633.1074,
+        "mean_avg_waiting_time_minutes": 7.6096,
+        "p90_waiting_time_minutes": 17.4483,
+        "overall_max_waiting_time_minutes": 39.6014,
+        "mean_customers_served": 27.33,
+        "mean_unserved_count": 5.61,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 176.1181,
+            "mean_avg_wait_minutes": 11.4569,
+            "p90_wait_minutes": 19.4368,
+            "mean_served": 13.31,
+            "mean_unserved": 1.77
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 43.9704,
+            "mean_avg_wait_minutes": 7.7402,
+            "p90_wait_minutes": 23.5696,
+            "mean_served": 3.75,
+            "mean_unserved": 0.85
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 40.7762,
+            "mean_avg_wait_minutes": 2.0399,
+            "p90_wait_minutes": 8.6606,
+            "mean_served": 10.27,
+            "mean_unserved": 2.99
+          }
+        }
+      },
+      "selected_policy": "OPTIMIZED",
+      "selected_candidate_id": "CAND_C3_TO_S1_D30",
+      "selected_action_description": "Reassign Counter 3 (C3) from Service 2 (queue=1) to Service 1 (queue=6) for 30m",
+      "pravaah_decision_info": {
+        "selected_candidate_id": "CAND_C3_TO_S1_D30",
+        "selected_policy": "OPTIMIZED",
+        "decision_replications": 100,
+        "decision_mean_wait": 221.1215,
+        "decision_margin": {
+          "condition_a_10pct_passed": true,
+          "relative_improvement": 0.2426,
+          "pct_improvement": 24.26,
+          "condition_b_70pct_wins_passed": true,
+          "decision_wins": 99,
+          "decision_win_rate": 0.99,
+          "best_candidate_id": "CAND_C3_TO_S1_D30",
+          "decision_notes": [
+            "Selected feasible candidate CAND_C3_TO_S1_D30: 10% margin passed (24.26% >= 10.0%), 70% win-rate passed (99/100 = 99.0%)."
+          ]
+        },
+        "is_feasible": true,
+        "decision_notes": [
+          "Selected feasible candidate CAND_C3_TO_S1_D30: 10% margin passed (24.26% >= 10.0%), 70% win-rate passed (99/100 = 99.0%)."
+        ]
+      },
+      "vs_baseline": {
+        "comparison_name": "PRAVAAH vs Baseline",
+        "mean_difference": 77.5438,
+        "standard_error": 4.0295,
+        "ci_95": [
+          69.5484,
+          85.5391
+        ],
+        "win_count": 97,
+        "loss_count": 3,
+        "tie_count": 0,
+        "win_rate": 0.97
+      },
+      "vs_naive_30": {
+        "comparison_name": "PRAVAAH vs Naive-30",
+        "mean_difference": 13.5346,
+        "standard_error": 4.9787,
+        "ci_95": [
+          3.6559,
+          23.4134
+        ],
+        "win_count": 57,
+        "loss_count": 43,
+        "tie_count": 0,
+        "win_rate": 0.57
+      },
+      "vs_naive_15": {
+        "comparison_name": "PRAVAAH vs Naive-15",
+        "mean_difference": 13.5181,
+        "standard_error": 4.2894,
+        "ci_95": [
+          5.0071,
+          22.0292
+        ],
+        "win_count": 61,
+        "loss_count": 39,
+        "tie_count": 0,
+        "win_rate": 0.61
+      },
+      "naive_30_vs_baseline": {
+        "comparison_name": "Naive-30 vs Baseline",
+        "mean_difference": 64.0091,
+        "standard_error": 4.7876,
+        "ci_95": [
+          54.5095,
+          73.5088
+        ],
+        "win_count": 93,
+        "loss_count": 7,
+        "tie_count": 0,
+        "win_rate": 0.93
+      },
+      "improvement_vs_baseline_person_min": 77.5438,
+      "pct_improvement_vs_baseline": 22.91,
+      "improvement_vs_naive_person_min": 13.5346,
+      "pct_improvement_vs_naive": 4.93,
+      "pravaah_beats_baseline": true,
+      "pravaah_beats_naive": true,
+      "pravaah_beats_naive_30": true,
+      "pravaah_beats_naive_15": true,
+      "naive_15_beats_naive_30": true,
+      "observations": [
+        "PRAVAAH outperformed Naive-30 by 13.53 person-min (95% CI: [3.66, 23.41]).",
+        "Sensitivity note: Naive-15 outperformed Naive-30 by 0.02 person-min."
+      ]
+    },
+    "scenario_e_known": {
+      "scenario_id": "scenario_e_known",
+      "scenario_name": "Scenario E (Known): Known Counter Failure at t=0",
+      "office_code": "MUNI",
+      "horizon_minutes": 60.0,
+      "decision_replications": 100,
+      "evaluation_replications": 100,
+      "baseline": {
+        "policy_type": "BASELINE",
+        "candidate_id": null,
+        "candidate_description": "No counter reassignment (Baseline)",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 201.1373,
+        "std_total_waiting_person_minutes": 97.3498,
+        "standard_error": 9.735,
+        "min_total_waiting_person_minutes": 34.0261,
+        "max_total_waiting_person_minutes": 527.7942,
+        "mean_avg_waiting_time_minutes": 5.4528,
+        "p90_waiting_time_minutes": 23.727,
+        "overall_max_waiting_time_minutes": 47.2635,
+        "mean_customers_served": 19.77,
+        "mean_unserved_count": 5.78,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 167.3107,
+            "mean_avg_wait_minutes": 14.4268,
+            "p90_wait_minutes": 31.1965,
+            "mean_served": 5.49,
+            "mean_unserved": 4.8
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 18.5765,
+            "mean_avg_wait_minutes": 2.4962,
+            "p90_wait_minutes": 10.8676,
+            "mean_served": 4.68,
+            "mean_unserved": 0.57
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 15.2501,
+            "mean_avg_wait_minutes": 1.2807,
+            "p90_wait_minutes": 4.8525,
+            "mean_served": 9.6,
+            "mean_unserved": 0.41
+          }
+        }
+      },
+      "naive": {
+        "policy_type": "NAIVE",
+        "candidate_id": "NAIVE_LONGEST_QUEUE_30",
+        "candidate_description": "Naive longest-queue reassignment: Counter 5 (C5) reassigned to service 1 for 30m",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 159.7282,
+        "std_total_waiting_person_minutes": 93.5401,
+        "standard_error": 9.354,
+        "min_total_waiting_person_minutes": 20.5434,
+        "max_total_waiting_person_minutes": 482.7484,
+        "mean_avg_waiting_time_minutes": 5.4782,
+        "p90_waiting_time_minutes": 15.9191,
+        "overall_max_waiting_time_minutes": 30.8335,
+        "mean_customers_served": 21.08,
+        "mean_unserved_count": 4.25,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 74.0122,
+            "mean_avg_wait_minutes": 5.481,
+            "p90_wait_minutes": 16.7555,
+            "mean_served": 7.79,
+            "mean_unserved": 2.56
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 17.9382,
+            "mean_avg_wait_minutes": 2.5112,
+            "p90_wait_minutes": 10.5763,
+            "mean_served": 4.65,
+            "mean_unserved": 0.56
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 67.7778,
+            "mean_avg_wait_minutes": 6.451,
+            "p90_wait_minutes": 17.3449,
+            "mean_served": 8.64,
+            "mean_unserved": 1.13
+          }
+        }
+      },
+      "naive_30": {
+        "policy_type": "NAIVE",
+        "candidate_id": "NAIVE_LONGEST_QUEUE_30",
+        "candidate_description": "Naive longest-queue reassignment: Counter 5 (C5) reassigned to service 1 for 30m",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 159.7282,
+        "std_total_waiting_person_minutes": 93.5401,
+        "standard_error": 9.354,
+        "min_total_waiting_person_minutes": 20.5434,
+        "max_total_waiting_person_minutes": 482.7484,
+        "mean_avg_waiting_time_minutes": 5.4782,
+        "p90_waiting_time_minutes": 15.9191,
+        "overall_max_waiting_time_minutes": 30.8335,
+        "mean_customers_served": 21.08,
+        "mean_unserved_count": 4.25,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 74.0122,
+            "mean_avg_wait_minutes": 5.481,
+            "p90_wait_minutes": 16.7555,
+            "mean_served": 7.79,
+            "mean_unserved": 2.56
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 17.9382,
+            "mean_avg_wait_minutes": 2.5112,
+            "p90_wait_minutes": 10.5763,
+            "mean_served": 4.65,
+            "mean_unserved": 0.56
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 67.7778,
+            "mean_avg_wait_minutes": 6.451,
+            "p90_wait_minutes": 17.3449,
+            "mean_served": 8.64,
+            "mean_unserved": 1.13
+          }
+        }
+      },
+      "naive_15": {
+        "policy_type": "NAIVE",
+        "candidate_id": "NAIVE_LONGEST_QUEUE_15",
+        "candidate_description": "Naive longest-queue reassignment: Counter 5 (C5) reassigned to service 1 for 15m",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 163.3312,
+        "std_total_waiting_person_minutes": 91.8211,
+        "standard_error": 9.1821,
+        "min_total_waiting_person_minutes": 28.4786,
+        "max_total_waiting_person_minutes": 443.993,
+        "mean_avg_waiting_time_minutes": 5.054,
+        "p90_waiting_time_minutes": 17.1998,
+        "overall_max_waiting_time_minutes": 37.6984,
+        "mean_customers_served": 20.69,
+        "mean_unserved_count": 4.64,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 99.9119,
+            "mean_avg_wait_minutes": 7.0988,
+            "p90_wait_minutes": 22.9162,
+            "mean_served": 6.83,
+            "mean_unserved": 3.48
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 17.6171,
+            "mean_avg_wait_minutes": 2.4909,
+            "p90_wait_minutes": 9.8828,
+            "mean_served": 4.62,
+            "mean_unserved": 0.55
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 45.8022,
+            "mean_avg_wait_minutes": 4.264,
+            "p90_wait_minutes": 12.5622,
+            "mean_served": 9.24,
+            "mean_unserved": 0.61
+          }
+        }
+      },
+      "pravaah": {
+        "policy_type": "OPTIMIZED",
+        "candidate_id": "CAND_C3_TO_S1_D30",
+        "candidate_description": "Reassign Counter 3 (C3) from Service 2 (queue=1) to Service 1 (queue=2) for 30m",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 138.1361,
+        "std_total_waiting_person_minutes": 80.2504,
+        "standard_error": 8.025,
+        "min_total_waiting_person_minutes": 25.6645,
+        "max_total_waiting_person_minutes": 415.7047,
+        "mean_avg_waiting_time_minutes": 4.231,
+        "p90_waiting_time_minutes": 15.6219,
+        "overall_max_waiting_time_minutes": 38.968,
+        "mean_customers_served": 21.05,
+        "mean_unserved_count": 4.24,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 73.4194,
+            "mean_avg_wait_minutes": 5.3225,
+            "p90_wait_minutes": 16.3038,
+            "mean_served": 7.81,
+            "mean_unserved": 2.55
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 49.0058,
+            "mean_avg_wait_minutes": 7.879,
+            "p90_wait_minutes": 24.7913,
+            "mean_served": 3.78,
+            "mean_unserved": 1.28
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 15.7109,
+            "mean_avg_wait_minutes": 1.3145,
+            "p90_wait_minutes": 5.1392,
+            "mean_served": 9.46,
+            "mean_unserved": 0.41
+          }
+        }
+      },
+      "selected_policy": "OPTIMIZED",
+      "selected_candidate_id": "CAND_C3_TO_S1_D30",
+      "selected_action_description": "Reassign Counter 3 (C3) from Service 2 (queue=1) to Service 1 (queue=2) for 30m",
+      "pravaah_decision_info": {
+        "selected_candidate_id": "CAND_C3_TO_S1_D30",
+        "selected_policy": "OPTIMIZED",
+        "decision_replications": 100,
+        "decision_mean_wait": 126.2937,
+        "decision_margin": {
+          "condition_a_10pct_passed": true,
+          "relative_improvement": 0.3318,
+          "pct_improvement": 33.18,
+          "condition_b_70pct_wins_passed": true,
+          "decision_wins": 90,
+          "decision_win_rate": 0.9,
+          "best_candidate_id": "CAND_C3_TO_S1_D30",
+          "decision_notes": [
+            "Selected feasible candidate CAND_C3_TO_S1_D30: 10% margin passed (33.18% >= 10.0%), 70% win-rate passed (90/100 = 90.0%)."
+          ]
+        },
+        "is_feasible": true,
+        "decision_notes": [
+          "Selected feasible candidate CAND_C3_TO_S1_D30: 10% margin passed (33.18% >= 10.0%), 70% win-rate passed (90/100 = 90.0%)."
+        ]
+      },
+      "vs_baseline": {
+        "comparison_name": "PRAVAAH vs Baseline",
+        "mean_difference": 63.0012,
+        "standard_error": 5.4248,
+        "ci_95": [
+          52.2373,
+          73.7651
+        ],
+        "win_count": 88,
+        "loss_count": 12,
+        "tie_count": 0,
+        "win_rate": 0.88
+      },
+      "vs_naive_30": {
+        "comparison_name": "PRAVAAH vs Naive-30",
+        "mean_difference": 21.5921,
+        "standard_error": 5.8233,
+        "ci_95": [
+          10.0375,
+          33.1467
+        ],
+        "win_count": 61,
+        "loss_count": 39,
+        "tie_count": 0,
+        "win_rate": 0.61
+      },
+      "vs_naive_15": {
+        "comparison_name": "PRAVAAH vs Naive-15",
+        "mean_difference": 25.1951,
+        "standard_error": 5.2174,
+        "ci_95": [
+          14.8428,
+          35.5475
+        ],
+        "win_count": 66,
+        "loss_count": 34,
+        "tie_count": 0,
+        "win_rate": 0.66
+      },
+      "naive_30_vs_baseline": {
+        "comparison_name": "Naive-30 vs Baseline",
+        "mean_difference": 41.4091,
+        "standard_error": 6.4085,
+        "ci_95": [
+          28.6934,
+          54.1248
+        ],
+        "win_count": 75,
+        "loss_count": 25,
+        "tie_count": 0,
+        "win_rate": 0.75
+      },
+      "improvement_vs_baseline_person_min": 63.0012,
+      "pct_improvement_vs_baseline": 31.32,
+      "improvement_vs_naive_person_min": 21.5921,
+      "pct_improvement_vs_naive": 13.52,
+      "pravaah_beats_baseline": true,
+      "pravaah_beats_naive": true,
+      "pravaah_beats_naive_30": true,
+      "pravaah_beats_naive_15": true,
+      "naive_15_beats_naive_30": false,
+      "observations": [
+        "PRAVAAH outperformed Naive-30 by 21.59 person-min (95% CI: [10.04, 33.15])."
+      ]
+    },
+    "scenario_e_unknown": {
+      "scenario_id": "scenario_e_unknown",
+      "scenario_name": "Scenario E (Unknown): Unannounced Counter Failure at t=10",
+      "office_code": "MUNI",
+      "horizon_minutes": 60.0,
+      "decision_replications": 100,
+      "evaluation_replications": 100,
+      "baseline": {
+        "policy_type": "BASELINE",
+        "candidate_id": null,
+        "candidate_description": "No counter reassignment (Baseline)",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 141.0279,
+        "std_total_waiting_person_minutes": 88.0468,
+        "standard_error": 8.8047,
+        "min_total_waiting_person_minutes": 22.9877,
+        "max_total_waiting_person_minutes": 434.2212,
+        "mean_avg_waiting_time_minutes": 3.7229,
+        "p90_waiting_time_minutes": 17.0531,
+        "overall_max_waiting_time_minutes": 41.2262,
+        "mean_customers_served": 20.72,
+        "mean_unserved_count": 4.8,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 106.9588,
+            "mean_avg_wait_minutes": 7.4974,
+            "p90_wait_minutes": 25.0046,
+            "mean_served": 6.59,
+            "mean_unserved": 3.72
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 18.7001,
+            "mean_avg_wait_minutes": 2.5172,
+            "p90_wait_minutes": 11.2184,
+            "mean_served": 4.67,
+            "mean_unserved": 0.59
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 15.369,
+            "mean_avg_wait_minutes": 1.3024,
+            "p90_wait_minutes": 4.7766,
+            "mean_served": 9.46,
+            "mean_unserved": 0.49
+          }
+        }
+      },
+      "naive": {
+        "policy_type": "NAIVE",
+        "candidate_id": null,
+        "candidate_description": "No counter reassignment (Baseline)",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 141.0279,
+        "std_total_waiting_person_minutes": 88.0468,
+        "standard_error": 8.8047,
+        "min_total_waiting_person_minutes": 22.9877,
+        "max_total_waiting_person_minutes": 434.2212,
+        "mean_avg_waiting_time_minutes": 3.7229,
+        "p90_waiting_time_minutes": 17.0531,
+        "overall_max_waiting_time_minutes": 41.2262,
+        "mean_customers_served": 20.72,
+        "mean_unserved_count": 4.8,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 106.9588,
+            "mean_avg_wait_minutes": 7.4974,
+            "p90_wait_minutes": 25.0046,
+            "mean_served": 6.59,
+            "mean_unserved": 3.72
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 18.7001,
+            "mean_avg_wait_minutes": 2.5172,
+            "p90_wait_minutes": 11.2184,
+            "mean_served": 4.67,
+            "mean_unserved": 0.59
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 15.369,
+            "mean_avg_wait_minutes": 1.3024,
+            "p90_wait_minutes": 4.7766,
+            "mean_served": 9.46,
+            "mean_unserved": 0.49
+          }
+        }
+      },
+      "naive_30": {
+        "policy_type": "NAIVE",
+        "candidate_id": null,
+        "candidate_description": "No counter reassignment (Baseline)",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 141.0279,
+        "std_total_waiting_person_minutes": 88.0468,
+        "standard_error": 8.8047,
+        "min_total_waiting_person_minutes": 22.9877,
+        "max_total_waiting_person_minutes": 434.2212,
+        "mean_avg_waiting_time_minutes": 3.7229,
+        "p90_waiting_time_minutes": 17.0531,
+        "overall_max_waiting_time_minutes": 41.2262,
+        "mean_customers_served": 20.72,
+        "mean_unserved_count": 4.8,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 106.9588,
+            "mean_avg_wait_minutes": 7.4974,
+            "p90_wait_minutes": 25.0046,
+            "mean_served": 6.59,
+            "mean_unserved": 3.72
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 18.7001,
+            "mean_avg_wait_minutes": 2.5172,
+            "p90_wait_minutes": 11.2184,
+            "mean_served": 4.67,
+            "mean_unserved": 0.59
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 15.369,
+            "mean_avg_wait_minutes": 1.3024,
+            "p90_wait_minutes": 4.7766,
+            "mean_served": 9.46,
+            "mean_unserved": 0.49
+          }
+        }
+      },
+      "naive_15": {
+        "policy_type": "NAIVE",
+        "candidate_id": null,
+        "candidate_description": "No counter reassignment (Baseline)",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 141.0279,
+        "std_total_waiting_person_minutes": 88.0468,
+        "standard_error": 8.8047,
+        "min_total_waiting_person_minutes": 22.9877,
+        "max_total_waiting_person_minutes": 434.2212,
+        "mean_avg_waiting_time_minutes": 3.7229,
+        "p90_waiting_time_minutes": 17.0531,
+        "overall_max_waiting_time_minutes": 41.2262,
+        "mean_customers_served": 20.72,
+        "mean_unserved_count": 4.8,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 106.9588,
+            "mean_avg_wait_minutes": 7.4974,
+            "p90_wait_minutes": 25.0046,
+            "mean_served": 6.59,
+            "mean_unserved": 3.72
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 18.7001,
+            "mean_avg_wait_minutes": 2.5172,
+            "p90_wait_minutes": 11.2184,
+            "mean_served": 4.67,
+            "mean_unserved": 0.59
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 15.369,
+            "mean_avg_wait_minutes": 1.3024,
+            "p90_wait_minutes": 4.7766,
+            "mean_served": 9.46,
+            "mean_unserved": 0.49
+          }
+        }
+      },
+      "pravaah": {
+        "policy_type": "BASELINE",
+        "candidate_id": null,
+        "candidate_description": "No counter reassignment (Baseline)",
+        "replications": 100,
+        "mean_total_waiting_person_minutes": 141.0279,
+        "std_total_waiting_person_minutes": 88.0468,
+        "standard_error": 8.8047,
+        "min_total_waiting_person_minutes": 22.9877,
+        "max_total_waiting_person_minutes": 434.2212,
+        "mean_avg_waiting_time_minutes": 3.7229,
+        "p90_waiting_time_minutes": 17.0531,
+        "overall_max_waiting_time_minutes": 41.2262,
+        "mean_customers_served": 20.72,
+        "mean_unserved_count": 4.8,
+        "per_service": {
+          "1": {
+            "service_id": 1,
+            "service_code": "PT",
+            "mean_total_waiting_person_minutes": 106.9588,
+            "mean_avg_wait_minutes": 7.4974,
+            "p90_wait_minutes": 25.0046,
+            "mean_served": 6.59,
+            "mean_unserved": 3.72
+          },
+          "2": {
+            "service_id": 2,
+            "service_code": "WC",
+            "mean_total_waiting_person_minutes": 18.7001,
+            "mean_avg_wait_minutes": 2.5172,
+            "p90_wait_minutes": 11.2184,
+            "mean_served": 4.67,
+            "mean_unserved": 0.59
+          },
+          "3": {
+            "service_id": 3,
+            "service_code": "BC",
+            "mean_total_waiting_person_minutes": 15.369,
+            "mean_avg_wait_minutes": 1.3024,
+            "p90_wait_minutes": 4.7766,
+            "mean_served": 9.46,
+            "mean_unserved": 0.49
+          }
+        }
+      },
+      "selected_policy": "BASELINE",
+      "selected_candidate_id": null,
+      "selected_action_description": "No counter reassignment (No intervention required)",
+      "pravaah_decision_info": {
+        "selected_candidate_id": null,
+        "selected_policy": "BASELINE",
+        "decision_replications": 100,
+        "decision_mean_wait": 73.7348,
+        "decision_margin": {
+          "condition_a_10pct_passed": false,
+          "relative_improvement": -0.017,
+          "pct_improvement": -1.7,
+          "condition_b_70pct_wins_passed": false,
+          "decision_wins": 40,
+          "decision_win_rate": 0.4,
+          "best_candidate_id": "CAND_C3_TO_S1_D15",
+          "decision_notes": [
+            "Failed 10% improvement margin: observed -1.70% < 10.0% required.",
+            "Failed 70% paired win-rate: observed 40/100 (40.0%) < 70.0% required."
+          ]
+        },
+        "is_feasible": true,
+        "decision_notes": [
+          "Failed 10% improvement margin: observed -1.70% < 10.0% required.",
+          "Failed 70% paired win-rate: observed 40/100 (40.0%) < 70.0% required."
+        ]
+      },
+      "vs_baseline": {
+        "comparison_name": "PRAVAAH vs Baseline",
+        "mean_difference": 0.0,
+        "standard_error": 0.0,
+        "ci_95": [
+          0.0,
+          0.0
+        ],
+        "win_count": 0,
+        "loss_count": 0,
+        "tie_count": 100,
+        "win_rate": 0.0
+      },
+      "vs_naive_30": {
+        "comparison_name": "PRAVAAH vs Naive-30",
+        "mean_difference": 0.0,
+        "standard_error": 0.0,
+        "ci_95": [
+          0.0,
+          0.0
+        ],
+        "win_count": 0,
+        "loss_count": 0,
+        "tie_count": 100,
+        "win_rate": 0.0
+      },
+      "vs_naive_15": {
+        "comparison_name": "PRAVAAH vs Naive-15",
+        "mean_difference": 0.0,
+        "standard_error": 0.0,
+        "ci_95": [
+          0.0,
+          0.0
+        ],
+        "win_count": 0,
+        "loss_count": 0,
+        "tie_count": 100,
+        "win_rate": 0.0
+      },
+      "naive_30_vs_baseline": {
+        "comparison_name": "Naive-30 vs Baseline",
+        "mean_difference": 0.0,
+        "standard_error": 0.0,
+        "ci_95": [
+          0.0,
+          0.0
+        ],
+        "win_count": 0,
+        "loss_count": 0,
+        "tie_count": 100,
+        "win_rate": 0.0
+      },
+      "improvement_vs_baseline_person_min": 0.0,
+      "pct_improvement_vs_baseline": 0.0,
+      "improvement_vs_naive_person_min": 0.0,
+      "pct_improvement_vs_naive": 0.0,
+      "pravaah_beats_baseline": false,
+      "pravaah_beats_naive": false,
+      "pravaah_beats_naive_30": false,
+      "pravaah_beats_naive_15": false,
+      "naive_15_beats_naive_30": false,
+      "observations": [
+        "PRAVAAH concluded NO INTERVENTION REQUIRED (Margin/Feasibility threshold default)."
+      ]
+    }
+  }
+}

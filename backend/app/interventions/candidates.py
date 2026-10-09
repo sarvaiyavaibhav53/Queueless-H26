@@ -10,66 +10,118 @@ Guarantees:
 - Bounded search space respecting max_candidates.
 """
 
-from typing import List, Optional, Sequence
+from typing import Dict, List, Optional, Sequence
 
 from app.interventions.models import InterventionCandidate
-from app.simulation.state import SimulationState
+from app.simulation.state import SimCounter, SimulationState
+from shared.stability import is_stable
 
 
-def build_naive_intervention(state: SimulationState) -> Optional[InterventionCandidate]:
+def build_naive_intervention(
+    state: SimulationState,
+    traffic_intensity_by_service: Optional[Dict[int, float]] = None,
+    duration_min: float = 30.0,
+    switching_delay_min: float = 3.0,
+) -> Optional[InterventionCandidate]:
     """
-    Constructs the NAIVE_LONGEST_QUEUE policy:
-    1. Inspects current waiting queue lengths across all services.
-    2. Identifies the service with the longest waiting queue.
-    3. Finds an eligible active counter not already assigned to that service.
-    4. Prefers an idle counter.
-    5. Returns candidate or None if no valid reassignment exists (falls back to NO_INTERVENTION).
+    Constructs the NAIVE heuristic policy using only current-state information:
+    a. Target service = service with the longest current waiting queue.
+    b. If target service is STABLE (rho < 0.85) or all queues empty, return no action.
+    c. Donor = eligible active counter satisfying:
+       - counter is ACTIVE
+       - counter is not already assigned to target service
+       - counter is eligible to serve target service
+       - donor's source service keeps at least 1 active assigned counter after reassignment
+    d. Ranked deterministically:
+       1. lowest current rho of donor's source service
+       2. idle donor preferred on rho tie
+       3. lowest counter_id as final tie-break
+    e. If no valid donor exists, return no action.
+    f. Naive uses a temporary reassignment (default 30.0m duration, 3.0m switching delay).
     """
-    # Sort services by queue length descending, tie-break by service_id ascending
-    sorted_services = sorted(
+    rho_map = (
+        traffic_intensity_by_service
+        if traffic_intensity_by_service is not None
+        else state.traffic_intensity_by_service
+    )
+
+    def get_rho(service_id: int) -> float:
+        if service_id in rho_map:
+            return rho_map[service_id]
+        svc_cfg = state.services.get(service_id)
+        if svc_cfg and svc_cfg.mean_service_minutes > 0.0:
+            active_count = sum(
+                1 for other in state.counters.values()
+                if other.is_active and other.assigned_service_id == service_id
+            )
+            mu = active_count * (60.0 / svc_cfg.mean_service_minutes)
+            q_len = state.queues[service_id].length() if service_id in state.queues else 0
+            return q_len / mu if mu > 0.0 else float(q_len)
+        return float(state.queues[service_id].length()) if service_id in state.queues else 0.0
+
+    # a. Target service = service with longest current waiting queue
+    sorted_queues = sorted(
         state.queues.items(),
         key=lambda item: (-item[1].length(), item[0]),
     )
 
-    for target_s_id, target_queue in sorted_services:
-        if target_queue.length() <= 0:
-            # All remaining queues have length 0; no reassignment justified
-            break
+    if not sorted_queues or sorted_queues[0][1].length() <= 0:
+        return None
 
-        # Find eligible active counters not currently assigned to target_s_id
-        eligible_counters = [
-            c for c in state.counters.values()
-            if c.is_active and c.can_serve(target_s_id) and c.assigned_service_id != target_s_id
-        ]
+    target_s_id = sorted_queues[0][0]
 
-        if not eligible_counters:
-            continue
+    # b. If target service is STABLE, return no action
+    target_rho = get_rho(target_s_id)
+    if is_stable(target_rho):
+        return None
 
-        # Preference: Idle counters first, then sort by source queue length ascending, then counter_id
-        eligible_counters.sort(
-            key=lambda c: (
-                1 if c.is_busy else 0,
-                state.queues[c.assigned_service_id].length(),
-                c.counter_id,
-            )
+    # c. Valid donors: active, eligible, not assigned to target, and donor's source service
+    # must retain at least 1 active assigned counter after reassignment.
+    def source_keeps_active_counter(c: SimCounter) -> bool:
+        active_source_count = sum(
+            1 for other in state.counters.values()
+            if other.is_active and other.assigned_service_id == c.assigned_service_id
         )
+        return active_source_count >= 2
 
-        chosen = eligible_counters[0]
-        return InterventionCandidate(
-            candidate_id="NAIVE_LONGEST_QUEUE",
-            counter_id=chosen.counter_id,
-            target_service_id=target_s_id,
-            source_service_id=chosen.assigned_service_id,
-            effective_time_min=0.0,
-            duration_min=None,
-            switching_delay_min=3.0,
-            description=(
-                f"Naive longest-queue reassignment: Counter {chosen.counter_id} ({chosen.name}) "
-                f"reassigned to service {target_s_id}"
-            ),
+    valid_donors = [
+        c for c in state.counters.values()
+        if c.is_active
+        and c.can_serve(target_s_id)
+        and c.assigned_service_id != target_s_id
+        and source_keeps_active_counter(c)
+    ]
+
+    if not valid_donors:
+        return None
+
+    # d. Deterministic ranking:
+    # 1. lowest source service rho
+    # 2. prefer idle donor
+    # 3. lowest counter_id tie-break
+    valid_donors.sort(
+        key=lambda c: (
+            get_rho(c.assigned_service_id),
+            1 if c.is_busy else 0,
+            c.counter_id,
         )
+    )
 
-    return None
+    chosen = valid_donors[0]
+    cand_suffix = f"_{int(duration_min)}" if duration_min is not None else ""
+    return InterventionCandidate(
+        candidate_id=f"NAIVE_LONGEST_QUEUE{cand_suffix}",
+        counter_id=chosen.counter_id,
+        target_service_id=target_s_id,
+        source_service_id=chosen.assigned_service_id,
+        effective_time_min=0.0,
+        duration_min=duration_min,
+        switching_delay_min=switching_delay_min,
+        description=(
+            f"Naive longest-queue reassignment: Counter {chosen.counter_id} ({chosen.name}) "
+            f"reassigned to service {target_s_id} for {duration_min:.0f}m"
+        ),
+    )
 
 
 def generate_candidate_interventions(

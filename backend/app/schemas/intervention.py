@@ -146,3 +146,38 @@ class InterventionEvaluationResponse(BaseModel):
         "Intervention evaluated successfully. "
         "Recommendation generated for advisory preview only; not applied to live operations."
     )
+
+
+class ApplyInterventionRequest(BaseModel):
+    office_id: int
+    counter_id: int
+    target_service_id: int
+
+
+class ApplyInterventionResponse(BaseModel):
+    applied: bool = True
+    office_id: int
+    counter_id: int
+    previous_service_id: int
+    target_service_id: int
+    reassigned_at_utc: datetime
+    switching_delay_note: str = (
+        "Operational database reassignment is immediate. "
+        "The 3.0-minute switching delay is modeled strictly in discrete-event simulation look-ahead."
+    )
+
+
+class RestoreInterventionRequest(BaseModel):
+    office_id: int
+    counter_id: int
+
+
+class RestoreInterventionResponse(BaseModel):
+    restored: bool = True
+    office_id: int
+    counter_id: int
+    previous_service_id: int
+    restored_service_id: int
+    restored_at_utc: datetime
+    message: str
+

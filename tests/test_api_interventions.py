@@ -18,6 +18,12 @@ J. Endpoint does not persist any intervention or mutate database state.
 Plus: Unauthenticated request rejected (401 Unauthorized).
 """
 
+import sys
+from pathlib import Path
+_backend_path = str(Path(__file__).resolve().parent.parent / "backend")
+if _backend_path not in sys.path:
+    sys.path.insert(0, _backend_path)
+
 from datetime import datetime, timedelta, timezone
 import unittest
 from unittest.mock import patch

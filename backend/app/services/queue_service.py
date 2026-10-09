@@ -4,9 +4,22 @@ from datetime import date, datetime, timezone
 from app.models.office import Office
 from app.models.service import Service
 from app.models.token import QueueToken, TokenStatus
+import threading
+from app.models.counter import Counter, CounterService, CounterStatus
 from app.models.queue_counter import QueueCounter
 
+_queue_lock = threading.Lock()
+
 class QueueServiceError(Exception):
+    pass
+
+class CounterNotFoundError(QueueServiceError):
+    pass
+
+class CounterConflictError(QueueServiceError):
+    pass
+
+class CounterValidationError(QueueServiceError):
     pass
 
 class QueueService:
@@ -17,62 +30,63 @@ class QueueService:
         """
         Generates a unique queue token deterministically using row-level locking (FOR UPDATE).
         """
-        today = date.today()
-        
-        # Verify office and service exist
-        office = db.query(Office).filter(Office.id == office_id).first()
-        service = db.query(Service).filter(Service.id == service_id).first()
-        
-        if not office or not service:
-            raise QueueServiceError("Invalid office or service")
-
-        from sqlalchemy.exc import IntegrityError
-        # 1. Lock or create the counter row for today
-        counter = db.query(QueueCounter).filter(
-            QueueCounter.office_id == office_id,
-            QueueCounter.service_id == service_id,
-            QueueCounter.date == today
-        ).with_for_update().first()
-
-        if not counter:
-            try:
-                # Use a nested transaction (savepoint) so we can catch the race condition
-                with db.begin_nested():
-                    counter = QueueCounter(
-                        office_id=office_id, 
-                        service_id=service_id, 
-                        date=today, 
-                        current_number=0
-                    )
-                    db.add(counter)
-            except IntegrityError:
-                # Another thread already created it, let's just proceed
-                pass
+        with _queue_lock:
+            today = date.today()
             
-            # Re-fetch with lock
+            # Verify office and service exist
+            office = db.query(Office).filter(Office.id == office_id).first()
+            service = db.query(Service).filter(Service.id == service_id).first()
+            
+            if not office or not service:
+                raise QueueServiceError("Invalid office or service")
+
+            from sqlalchemy.exc import IntegrityError
+            # 1. Lock or create the counter row for today
             counter = db.query(QueueCounter).filter(
                 QueueCounter.office_id == office_id,
                 QueueCounter.service_id == service_id,
                 QueueCounter.date == today
             ).with_for_update().first()
 
-        counter.current_number += 1
-        
-        # Token format: [OfficeCode]-[ServiceCode]-[Number] (e.g., RJT-LL-001)
-        token_number_str = f"{office.code}-{service.code}-{counter.current_number:03d}"
-        
-        token = QueueToken(
-            token_number=token_number_str,
-            office_id=office_id,
-            service_id=service_id,
-            status=TokenStatus.WAITING,
-            created_at=self._get_utc_now()
-        )
-        
-        db.add(token)
-        db.commit()
-        db.refresh(token)
-        return token
+            if not counter:
+                try:
+                    # Use a nested transaction (savepoint) so we can catch the race condition
+                    with db.begin_nested():
+                        counter = QueueCounter(
+                            office_id=office_id, 
+                            service_id=service_id, 
+                            date=today, 
+                            current_number=0
+                        )
+                        db.add(counter)
+                except IntegrityError:
+                    # Another thread already created it, let's just proceed
+                    pass
+                
+                # Re-fetch with lock
+                counter = db.query(QueueCounter).filter(
+                    QueueCounter.office_id == office_id,
+                    QueueCounter.service_id == service_id,
+                    QueueCounter.date == today
+                ).with_for_update().first()
+
+            counter.current_number += 1
+            
+            # Token format: [OfficeCode]-[ServiceCode]-[Number] (e.g., RJT-LL-001)
+            token_number_str = f"{office.code}-{service.code}-{counter.current_number:03d}"
+            
+            token = QueueToken(
+                token_number=token_number_str,
+                office_id=office_id,
+                service_id=service_id,
+                status=TokenStatus.WAITING,
+                created_at=self._get_utc_now()
+            )
+            
+            db.add(token)
+            db.commit()
+            db.refresh(token)
+            return token
 
     def get_queue_position(self, db: Session, token_id: int) -> int:
         """
@@ -95,25 +109,119 @@ class QueueService:
         
         return position + 1
 
-    def call_next_token(self, db: Session, office_id: int, service_id: int) -> QueueToken:
+    def call_next_token(
+        self,
+        db: Session,
+        office_id: int,
+        service_id: int,
+        counter_id: int = None,
+    ) -> QueueToken:
         """
         Gets the next waiting token and changes its status to CALLED.
+        Validates all 9 invariants when counter_id is provided.
         """
-        # Find the oldest WAITING token
-        token = db.query(QueueToken).filter(
-            QueueToken.office_id == office_id,
-            QueueToken.service_id == service_id,
-            QueueToken.status == TokenStatus.WAITING
-        ).order_by(QueueToken.created_at.asc()).with_for_update().first()
-        
-        if not token:
-            return None
-            
-        token.status = TokenStatus.CALLED
-        token.called_at = self._get_utc_now()
-        db.commit()
-        db.refresh(token)
-        return token
+        with _queue_lock:
+            assigned_counter_id = None
+
+            if counter_id is not None:
+                # 1. Counter exists
+                counter = db.query(Counter).filter(Counter.id == counter_id).with_for_update().first()
+                if not counter:
+                    raise CounterNotFoundError(f"Counter with ID {counter_id} not found.")
+
+                # 2. Belongs to requested office
+                if counter.office_id != office_id:
+                    raise CounterValidationError(
+                        f"Counter {counter_id} belongs to office {counter.office_id}, not {office_id}."
+                    )
+
+                # 3. Status is ACTIVE
+                if counter.status != CounterStatus.ACTIVE:
+                    raise CounterValidationError(
+                        f"Counter '{counter.name}' is UNAVAILABLE and cannot call tokens."
+                    )
+
+                # 4. Assigned to requested service
+                if counter.assigned_service_id != service_id:
+                    raise CounterValidationError(
+                        f"Counter '{counter.name}' is assigned to service {counter.assigned_service_id}, not {service_id}."
+                    )
+
+                # 5. Eligible to handle service
+                is_eligible = (
+                    db.query(CounterService)
+                    .filter(
+                        CounterService.counter_id == counter.id,
+                        CounterService.service_id == service_id,
+                    )
+                    .first()
+                )
+                if not is_eligible:
+                    raise CounterValidationError(
+                        f"Counter '{counter.name}' is not eligible to serve service {service_id}."
+                    )
+
+                # 6. Counter is idle (no active token in CALLED or SERVING)
+                active_token = (
+                    db.query(QueueToken)
+                    .filter(
+                        QueueToken.counter_id == counter.id,
+                        QueueToken.status.in_([TokenStatus.CALLED, TokenStatus.SERVING]),
+                    )
+                    .first()
+                )
+                if active_token:
+                    raise CounterConflictError(
+                        f"Counter '{counter.name}' is already busy with active token '{active_token.token_number}'."
+                    )
+
+                assigned_counter_id = counter.id
+            else:
+                # Fallback for unassigned caller: pick first idle active counter assigned to this service
+                active_counters = (
+                    db.query(Counter)
+                    .filter(
+                        Counter.office_id == office_id,
+                        Counter.assigned_service_id == service_id,
+                        Counter.status == CounterStatus.ACTIVE,
+                    )
+                    .all()
+                )
+                for c in active_counters:
+                    busy = (
+                        db.query(QueueToken)
+                        .filter(
+                            QueueToken.counter_id == c.id,
+                            QueueToken.status.in_([TokenStatus.CALLED, TokenStatus.SERVING]),
+                        )
+                        .first()
+                    )
+                    if not busy:
+                        assigned_counter_id = c.id
+                        break
+
+            # 7. Find oldest WAITING token using locked FIFO order (created_at ASC, id ASC)
+            token = (
+                db.query(QueueToken)
+                .filter(
+                    QueueToken.office_id == office_id,
+                    QueueToken.service_id == service_id,
+                    QueueToken.status == TokenStatus.WAITING,
+                )
+                .order_by(QueueToken.created_at.asc(), QueueToken.id.asc())
+                .with_for_update()
+                .first()
+            )
+
+            if not token:
+                return None
+
+            token.status = TokenStatus.CALLED
+            token.counter_id = assigned_counter_id
+            token.called_at = self._get_utc_now()
+            db.commit()
+            db.refresh(token)
+            return token
 
     def _transition_state(self, token: QueueToken, new_status: TokenStatus, current_time: datetime):
         valid_transitions = {

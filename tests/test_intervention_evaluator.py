@@ -102,6 +102,8 @@ class TestInterventionEvaluator(unittest.TestCase):
         c1 = CounterSnapshot(1, 101, "C1", "ACTIVE", self.t_snap, 1, frozenset([1]), None)
         # Counter 2 assigned to WC (eligible PT, WC)
         c2 = CounterSnapshot(2, 101, "C2", "ACTIVE", self.t_snap, 2, frozenset([1, 2]), None)
+        # Counter 3 assigned to WC (ensures WC retains at least 1 counter after C2 donation)
+        c3 = CounterSnapshot(3, 101, "C3", "ACTIVE", self.t_snap, 2, frozenset([2]), None)
 
         snap = SimulationSnapshot(
             office_id=101, office_code="AMD", snapshot_time_utc=self.t_snap,
@@ -110,9 +112,10 @@ class TestInterventionEvaluator(unittest.TestCase):
                 1: ServiceQueueSnapshot(1, w_pt, ()),
                 2: ServiceQueueSnapshot(2, w_wc, ()),
             },
-            counters={1: c1, 2: c2},
+            counters={1: c1, 2: c2, 3: c3},
         )
         state = SimulationState.from_snapshot(snap)
+        state.traffic_intensity_by_service = {1: 1.20, 2: 0.40}  # S1 is UNSTABLE
         naive_cand = build_naive_intervention(state)
 
         self.assertIsNotNone(naive_cand)

@@ -171,28 +171,82 @@ class InterventionEvaluator:
 
         feasible_evals = [e for e in all_actionable_evals if e.is_feasible]
 
-        # Decision Logic:
-        # - If no intervention candidate is feasible, select BASELINE.
-        # - Among feasible candidates, choose the candidate with lowest mean_total_waiting_person_minutes.
-        # - Compare best feasible candidate against BASELINE: if BASELINE has lower waiting time, select BASELINE.
-        if not feasible_evals:
-            selected_eval = baseline_eval
-        else:
-            # Sort feasible candidates by total waiting person-minutes ascending
-            feasible_evals.sort(key=lambda e: (e.mean_total_waiting_person_minutes, e.candidate.candidate_id if e.candidate else ""))
-            best_candidate_eval = feasible_evals[0]
-
-            if best_candidate_eval.mean_total_waiting_person_minutes <= baseline_eval.mean_total_waiting_person_minutes:
-                selected_eval = best_candidate_eval
-            else:
-                # Baseline is strictly better than any intervention
-                selected_eval = baseline_eval
-
-        # 5. Improvement Metrics (Zero-division safe)
+        # PRAVAAH Decision Logic (Section 6):
+        # 1. Evaluate no action (baseline_eval).
+        # 2. Evaluate legal intervention candidates.
+        # 3. Apply existing P90 feasibility constraints (feasible_evals).
+        # 4. Identify the feasible candidate with lowest mean waiting person-minutes.
+        # PRAVAAH may recommend an action ONLY if BOTH conditions are satisfied:
+        # CONDITION A — 10% IMPROVEMENT: improvement >= 0.10 vs baseline
+        # CONDITION B — 70% PAIRED WIN RATE: candidate_metric < no_action_metric in >= 70% of reps
+        # If either condition fails, return "No intervention required" (Baseline).
         base_wait = baseline_eval.mean_total_waiting_person_minutes
         naive_wait = naive_eval.mean_total_waiting_person_minutes
-        sel_wait = selected_eval.mean_total_waiting_person_minutes
 
+        best_candidate_eval: Optional[PolicyEvaluation] = None
+        improvement = 0.0
+        pct_imp = 0.0
+        decision_wins = 0
+        decision_win_rate = 0.0
+        cond_a_passed = False
+        cond_b_passed = False
+        decision_notes: List[str] = []
+
+        if not feasible_evals:
+            selected_eval = baseline_eval
+            decision_notes.append("No intervention candidate satisfied P90 feasibility constraints.")
+        else:
+            # Sort feasible candidates by total waiting person-minutes ascending
+            feasible_evals.sort(
+                key=lambda e: (
+                    e.mean_total_waiting_person_minutes,
+                    e.candidate.candidate_id if e.candidate else "",
+                )
+            )
+            best_candidate_eval = feasible_evals[0]
+            cand_wait = best_candidate_eval.mean_total_waiting_person_minutes
+
+            # Condition A: 10% reduction in mean waiting person-minutes vs no action
+            if base_wait > 1e-9:
+                improvement = (base_wait - cand_wait) / base_wait
+            else:
+                improvement = 0.0
+            pct_imp = improvement * 100.0
+            cond_a_passed = (improvement >= 0.10)
+
+            # Condition B: 70% paired win rate across decision replications
+            # candidate_metric < no_action_metric counts as a win. Ties do NOT count.
+            rep_count = len(baseline_eval.replication_total_waits)
+            cand_waits = best_candidate_eval.replication_total_waits
+            base_waits = baseline_eval.replication_total_waits
+            decision_wins = sum(
+                1 for c_w, b_w in zip(cand_waits, base_waits)
+                if c_w < b_w
+            )
+            decision_win_rate = decision_wins / rep_count if rep_count > 0 else 0.0
+            cond_b_passed = (decision_win_rate >= 0.70)
+
+            if cond_a_passed and cond_b_passed:
+                # Both margin conditions satisfied: recommend intervention
+                selected_eval = best_candidate_eval
+                decision_notes.append(
+                    f"Selected feasible candidate {best_candidate_eval.candidate.candidate_id if best_candidate_eval.candidate else 'ACTION'}: "
+                    f"10% margin passed ({pct_imp:.2f}% >= 10.0%), "
+                    f"70% win-rate passed ({decision_wins}/{rep_count} = {decision_win_rate:.1%})."
+                )
+            else:
+                # Fails margin or win rate: default to no action
+                selected_eval = baseline_eval
+                if not cond_a_passed:
+                    decision_notes.append(
+                        f"Failed 10% improvement margin: observed {pct_imp:.2f}% < 10.0% required."
+                    )
+                if not cond_b_passed:
+                    decision_notes.append(
+                        f"Failed 70% paired win-rate: observed {decision_wins}/{rep_count} ({decision_win_rate:.1%}) < 70.0% required."
+                    )
+
+        sel_wait = selected_eval.mean_total_waiting_person_minutes
         imp_vs_base = base_wait - sel_wait
         pct_imp_vs_base = (imp_vs_base / base_wait * 100.0) if base_wait > 1e-6 else 0.0
 
@@ -217,7 +271,7 @@ class InterventionEvaluator:
             "description": (
                 selected_eval.candidate.description
                 if selected_eval.candidate
-                else "No counter reassignment"
+                else "No counter reassignment (No intervention required)"
             ),
             "baseline_waiting_person_minutes": round(base_wait, 4),
             "naive_waiting_person_minutes": round(naive_wait, 4),
@@ -228,6 +282,20 @@ class InterventionEvaluator:
             "pct_saved_vs_naive": round(pct_imp_vs_naive, 2),
             "rejected_candidates_count": len(rejected_list),
             "rejected_candidates": rejected_list,
+            "decision_margin": {
+                "condition_a_10pct_passed": cond_a_passed,
+                "relative_improvement": round(improvement, 4),
+                "pct_improvement": round(pct_imp, 2),
+                "condition_b_70pct_wins_passed": cond_b_passed,
+                "decision_wins": decision_wins,
+                "decision_win_rate": round(decision_win_rate, 4),
+                "best_candidate_id": (
+                    best_candidate_eval.candidate.candidate_id
+                    if best_candidate_eval and best_candidate_eval.candidate
+                    else None
+                ),
+                "decision_notes": decision_notes,
+            },
             "p90_wait_by_service": {
                 k: round(v, 4) for k, v in selected_eval.p90_wait_by_service.items()
             },

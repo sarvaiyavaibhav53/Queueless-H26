@@ -27,6 +27,17 @@ def apply_date_filter(query, start_date: Optional[datetime], end_date: Optional[
         query = query.filter(QueueToken.created_at <= end_date)
     return query
 
+def _calculate_avg_wait_and_service(query):
+    wait_rows = query.filter(QueueToken.serving_at.isnot(None), QueueToken.created_at.isnot(None)).with_entities(QueueToken.serving_at, QueueToken.created_at).all()
+    wait_diffs = [(r[0] - r[1]).total_seconds() for r in wait_rows if r[0] and r[1]]
+    avg_wait = (sum(wait_diffs) / len(wait_diffs)) / 60.0 if wait_diffs else None
+
+    service_rows = query.filter(QueueToken.completed_at.isnot(None), QueueToken.serving_at.isnot(None)).with_entities(QueueToken.completed_at, QueueToken.serving_at).all()
+    service_diffs = [(r[0] - r[1]).total_seconds() for r in service_rows if r[0] and r[1]]
+    avg_service = (sum(service_diffs) / len(service_diffs)) / 60.0 if service_diffs else None
+
+    return avg_wait, avg_service
+
 @router.get("/overall", response_model=OverallAnalyticsResponse)
 def get_overall_analytics(
     start_date: Optional[datetime] = None,
@@ -53,15 +64,7 @@ def get_overall_analytics(
     for status, count in status_counts:
         counts[status] = count
         
-    # Wait time: serving_at - created_at for those who started serving
-    wait_query = query.filter(QueueToken.serving_at.isnot(None))
-    wait_times = wait_query.with_entities(func.extract('epoch', QueueToken.serving_at - QueueToken.created_at)).all()
-    avg_wait = (sum(float(w[0]) for w in wait_times if w[0] is not None) / len(wait_times)) / 60.0 if wait_times else None
-    
-    # Service time: completed_at - serving_at
-    service_query = query.filter(QueueToken.completed_at.isnot(None), QueueToken.serving_at.isnot(None))
-    service_times = service_query.with_entities(func.extract('epoch', QueueToken.completed_at - QueueToken.serving_at)).all()
-    avg_service = (sum(float(s[0]) for s in service_times if s[0] is not None) / len(service_times)) / 60.0 if service_times else None
+    avg_wait, avg_service = _calculate_avg_wait_and_service(query)
 
     return OverallAnalyticsResponse(
         total_tokens=total,
@@ -109,13 +112,7 @@ def get_office_analytics(
     for status, count in status_counts:
         counts[status] = count
         
-    wait_query = query.filter(QueueToken.serving_at.isnot(None))
-    wait_times = wait_query.with_entities(func.extract('epoch', QueueToken.serving_at - QueueToken.created_at)).all()
-    avg_wait = (sum(float(w[0]) for w in wait_times if w[0] is not None) / len(wait_times)) / 60.0 if wait_times else None
-    
-    service_query = query.filter(QueueToken.completed_at.isnot(None), QueueToken.serving_at.isnot(None))
-    service_times = service_query.with_entities(func.extract('epoch', QueueToken.completed_at - QueueToken.serving_at)).all()
-    avg_service = (sum(float(s[0]) for s in service_times if s[0] is not None) / len(service_times)) / 60.0 if service_times else None
+    avg_wait, avg_service = _calculate_avg_wait_and_service(query)
 
     return OfficeAnalyticsResponse(
         office_id=office.id,
@@ -161,13 +158,7 @@ def get_service_analytics(
     for status, count in status_counts:
         counts[status] = count
         
-    wait_query = query.filter(QueueToken.serving_at.isnot(None))
-    wait_times = wait_query.with_entities(func.extract('epoch', QueueToken.serving_at - QueueToken.created_at)).all()
-    avg_wait = (sum(float(w[0]) for w in wait_times if w[0] is not None) / len(wait_times)) / 60.0 if wait_times else None
-    
-    service_query = query.filter(QueueToken.completed_at.isnot(None), QueueToken.serving_at.isnot(None))
-    service_times = service_query.with_entities(func.extract('epoch', QueueToken.completed_at - QueueToken.serving_at)).all()
-    avg_service = (sum(float(s[0]) for s in service_times if s[0] is not None) / len(service_times)) / 60.0 if service_times else None
+    avg_wait, avg_service = _calculate_avg_wait_and_service(query)
 
     return ServiceAnalyticsResponse(
         service_id=service.id,

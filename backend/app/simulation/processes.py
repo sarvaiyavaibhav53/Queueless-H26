@@ -300,6 +300,7 @@ class ArrivalBurst:
     end_min: float
     multiplier: float = 1.0               # Multiplier applied to background rate
     additional_rate_per_hour: float = 0.0  # Additive arrivals/hour
+    announced: bool = False
 
     def __post_init__(self) -> None:
         if self.start_min < 0.0:

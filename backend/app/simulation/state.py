@@ -136,6 +136,8 @@ class SimulationState:
     counters: Dict[int, SimCounter]
     # Existing active tokens from snapshot: counter_id -> (ServingTokenSnapshot, elapsed_minutes)
     initial_serving_tokens: Dict[int, Tuple[ServingTokenSnapshot, float]] = field(default_factory=dict)
+    # Current traffic intensity rho (lambda / mu) per service from current state
+    traffic_intensity_by_service: Dict[int, float] = field(default_factory=dict)
 
     @classmethod
     def from_snapshot(cls, snapshot: SimulationSnapshot) -> "SimulationState":
@@ -191,6 +193,29 @@ class SimulationState:
                 service_end_time_min=None,
             )
 
+        # 4. Compute current-state traffic intensity rho per service from snapshot
+        rho_by_service: Dict[int, float] = {}
+        for s_id, s_queue in snapshot.queues.items():
+            count_60 = sum(
+                1 for arr_time in s_queue.recent_arrivals_utc
+                if 0.0 <= (snapshot.snapshot_time_utc - arr_time).total_seconds() / 60.0 <= 60.0
+            )
+            svc = services_map.get(s_id)
+            if svc and svc.mean_service_minutes > 0.0:
+                active_count = sum(
+                    1 for c in snapshot.counters.values()
+                    if c.status == "ACTIVE" and c.assigned_service_id == s_id
+                )
+                mu = active_count * (60.0 / svc.mean_service_minutes)
+                if mu > 0.0:
+                    rho_by_service[s_id] = count_60 / mu
+                elif count_60 == 0:
+                    rho_by_service[s_id] = 0.0
+                else:
+                    rho_by_service[s_id] = 99.0
+            else:
+                rho_by_service[s_id] = 0.0
+
         return cls(
             office_id=snapshot.office_id,
             office_code=snapshot.office_code,
@@ -199,6 +224,7 @@ class SimulationState:
             queues=queues_map,
             counters=counters_map,
             initial_serving_tokens=initial_active,
+            traffic_intensity_by_service=rho_by_service,
         )
 
     def clone(self) -> "SimulationState":
@@ -213,4 +239,5 @@ class SimulationState:
             queues={s_id: q.clone() for s_id, q in self.queues.items()},
             counters={c_id: c.clone() for c_id, c in self.counters.items()},
             initial_serving_tokens=dict(self.initial_serving_tokens),
+            traffic_intensity_by_service=dict(self.traffic_intensity_by_service),
         )

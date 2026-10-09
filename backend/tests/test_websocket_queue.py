@@ -5,7 +5,6 @@ from app.main import app
 from app.models.office import Office
 from app.models.service import Service
 from app.models.token import QueueToken, TokenStatus
-import asyncio
 from unittest.mock import patch
 
 client = TestClient(app)
@@ -58,11 +57,12 @@ def test_ws_broadcast_on_join(mock_predict, db_session, setup_data):
         assert response.status_code == 201
         
         data = websocket.receive_json()
-        assert data["event"] == "JOINED"
-        assert data["queue"]["waiting_count"] == 1
-        assert len(data["tokens"]) == 1
-        assert data["tokens"][0]["status"] == TokenStatus.WAITING.value
-        assert data["tokens"][0]["position"] == 1
+        # Invalidation-only contract
+        assert data["type"] == "queue.updated"
+        assert data["office_id"] == office.id
+        assert data["service_id"] == service.id
+        assert "occurred_at" in data
+        assert "tokens" not in data
 
 @patch('app.services.prediction_service.WaitTimePredictionService.predict_wait_time', return_value=5.0)
 def test_ws_broadcast_on_call_and_complete(mock_predict, db_session, setup_data):
@@ -78,29 +78,28 @@ def test_ws_broadcast_on_call_and_complete(mock_predict, db_session, setup_data)
         t1_id = call_resp.json()["id"]
         
         data = websocket.receive_json()
-        assert data["event"] == "CALLED"
-        assert data["queue"]["waiting_count"] == 1
-        # Token 2 is waiting (position 1), Token 1 is called (position 0)
-        assert len(data["tokens"]) == 2
+        assert data["type"] == "queue.updated"
+        assert data["office_id"] == office.id
+        assert data["service_id"] == service.id
+        assert "tokens" not in data
         
         # Start
         client.post(f"/api/v1/tokens/{t1_id}/start")
         data = websocket.receive_json()
-        assert data["event"] == "STARTED"
+        assert data["type"] == "queue.updated"
+        assert "tokens" not in data
         
         # Complete
         client.post(f"/api/v1/tokens/{t1_id}/complete")
         data = websocket.receive_json()
-        assert data["event"] == "COMPLETED"
-        assert data["queue"]["waiting_count"] == 1
+        assert data["type"] == "queue.updated"
+        assert "tokens" not in data
         
         # Cancel Token 2
         client.post(f"/api/v1/tokens/{t2_id}/cancel")
         data = websocket.receive_json()
-        assert data["event"] == "CANCELLED"
-        assert data["queue"]["waiting_count"] == 0
-        assert len(data["tokens"]) == 1 # Only the cancelled token is sent
-        assert data["tokens"][0]["status"] == "CANCELLED"
+        assert data["type"] == "queue.updated"
+        assert "tokens" not in data
 
 def test_ws_isolation(db_session, setup_data):
     office, service = setup_data
@@ -115,14 +114,13 @@ def test_ws_isolation(db_session, setup_data):
             client.post(f"/api/v1/queues/{service.id}/join", json={"office_id": office.id})
             
             data1 = ws1.receive_json()
-            assert data1["event"] == "JOINED"
+            assert data1["type"] == "queue.updated"
+            assert data1["service_id"] == service.id
             
-            # ws2 should not receive this. If we try to receive, it will block. 
-            # In a TestClient, if we try to receive and there's nothing, it blocks.
-            # But we can verify by triggering something else on ws2.
+            # ws2 should not receive this. Now trigger join on queue 2
             client.post(f"/api/v1/queues/{service2.id}/join", json={"office_id": office.id})
             data2 = ws2.receive_json()
-            assert data2["event"] == "JOINED"
+            assert data2["type"] == "queue.updated"
             assert data2["service_id"] == service2.id
 
 @patch('app.services.prediction_service.WaitTimePredictionService.predict_wait_time', return_value=5.0)
@@ -138,27 +136,18 @@ def test_ws_broadcast_on_skip(mock_predict, db_session, setup_data):
         call_resp = client.post(f"/api/v1/queues/{office.id}/{service.id}/call-next")
         t1_id = call_resp.json()["id"]
         
-        # Read the CALLED message
-        websocket.receive_json()
+        # Read the CALLED invalidation message
+        data_called = websocket.receive_json()
+        assert data_called["type"] == "queue.updated"
         
         # Skip Token 1
         client.post(f"/api/v1/tokens/{t1_id}/skip")
         data = websocket.receive_json()
         
-        assert data["event"] == "SKIPPED"
+        assert data["type"] == "queue.updated"
         assert data["office_id"] == office.id
         assert data["service_id"] == service.id
-        assert data["queue"]["waiting_count"] == 1
-        
-        # We should have Token 2 (WAITING, position 1) and Token 1 (SKIPPED) in the tokens array
-        assert len(data["tokens"]) == 2
-        
-        skipped_token = next(t for t in data["tokens"] if t["token_id"] == t1_id)
-        waiting_token = next(t for t in data["tokens"] if t["token_id"] == t2_id)
-        
-        assert skipped_token["status"] == "SKIPPED"
-        assert waiting_token["status"] == "WAITING"
-        assert waiting_token["position"] == 1
+        assert "tokens" not in data
 
 def test_ws_disconnect_handling(db_session, setup_data):
     office, service = setup_data
@@ -182,7 +171,7 @@ def test_ws_disconnect_handling(db_session, setup_data):
         
         # ws_a should receive it
         msg_a = ws_a.receive_json()
-        assert msg_a["event"] == "JOINED"
+        assert msg_a["type"] == "queue.updated"
         
         # The connection manager should have cleaned up the dead connection (ws_b)
         assert len(ws_manager.active_connections.get(key, [])) == 1

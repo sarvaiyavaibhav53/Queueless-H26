@@ -193,26 +193,26 @@ def test_websocket_e2e(db_session):
         token_id = join_resp.json()["id"]
         
         ws_msg = websocket.receive_json()
-        assert ws_msg["event"] == "JOINED"
-        assert any(t["token_id"] == token_id for t in ws_msg["tokens"])
+        assert ws_msg["type"] == "queue.updated"
+        assert ws_msg["office_id"] == office_id
+        assert ws_msg["service_id"] == service_id
+        assert "occurred_at" in ws_msg
+        assert "tokens" not in ws_msg
         
         # Call
         client.post(f"/api/v1/queues/{office_id}/{service_id}/call-next")
         ws_msg = websocket.receive_json()
-        assert ws_msg["event"] == "CALLED"
-        assert any(t["token_id"] == token_id for t in ws_msg["tokens"])
+        assert ws_msg["type"] == "queue.updated"
         
         # Start
         client.post(f"/api/v1/tokens/{token_id}/start")
         ws_msg = websocket.receive_json()
-        assert ws_msg["event"] == "STARTED"
-        assert any(t["token_id"] == token_id for t in ws_msg["tokens"])
+        assert ws_msg["type"] == "queue.updated"
         
         # Complete
         client.post(f"/api/v1/tokens/{token_id}/complete")
         ws_msg = websocket.receive_json()
-        assert ws_msg["event"] == "COMPLETED"
-        assert any(t["token_id"] == token_id for t in ws_msg["tokens"])
+        assert ws_msg["type"] == "queue.updated"
 
 def test_input_validation():
     # Nonexistent office

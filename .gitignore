@@ -1,11 +1,41 @@
+# Environment & Secrets
 .env
 .env.*
 !.env.example
+
+# Python bytecode & environments
 __pycache__/
 *.py[cod]
+*$py.class
 .venv/
+env/
+venv/
+
+# Testing & Coverage
 .pytest_cache/
+.coverage
+htmlcov/
 *.log
+
+# Databases & local storage
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+test.db
+
+# Frontend & Dependencies
+node_modules/
+dist/
+build/
+
+# Editor & OS artifacts
 .DS_Store
 .vscode/
 .idea/
+Thumbs.db
+
+# Scratch and temporary investigation
+scratch/

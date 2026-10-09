@@ -1,0 +1,305 @@
+{
+  "generator_version": "2E.1C_Production_v1",
+  "generated_at_utc": "2026-10-08T12:18:53.405564+00:00",
+  "base_seed": 1000000,
+  "total_trajectories": 1500,
+  "total_candidate_observations": 32802,
+  "valid_supervised_rows": 32802,
+  "censored_observations": 0,
+  "censoring_percentage": 0.0,
+  "runtime_seconds": {
+    "total_wall_clock": 10.64,
+    "total_simulation_compute": 10.18,
+    "avg_ms_per_trajectory": 6.79
+  },
+  "trajectory_yields": {
+    "min_rows_per_trajectory": 1,
+    "median_rows_per_trajectory": 20.0,
+    "mean_rows_per_trajectory": 21.99,
+    "max_rows_per_trajectory": 40,
+    "per_trajectory_cap": 40
+  },
+  "coverage": {
+    "offices": {
+      "MUNI": 23011,
+      "RTO": 9791
+    },
+    "services": {
+      "PT": 10927,
+      "BC": 6052,
+      "WC": 6032,
+      "OT": 5767,
+      "DR": 4024
+    },
+    "regimes": {
+      "HEALTHY": 11525,
+      "MODERATE": 8863,
+      "HIGH_LOAD": 5398,
+      "STRESSED": 2963,
+      "FAILURE": 2120,
+      "INTERVENTION": 1933
+    },
+    "observation_types": {
+      "PERIODIC": 20885,
+      "JOIN": 11917
+    },
+    "hours": {
+      "12": 4942,
+      "10": 4851,
+      "15": 4832,
+      "11": 4794,
+      "14": 4786,
+      "13": 4592,
+      "9": 2272,
+      "16": 1733
+    },
+    "weekdays": {
+      "1": 6844,
+      "2": 6778,
+      "0": 6657,
+      "3": 6503,
+      "4": 6020
+    }
+  },
+  "features": {
+    "hour": {
+      "min": 9.0,
+      "max": 16.0,
+      "mean": 12.4353,
+      "median": 12.0,
+      "std": 2.0165,
+      "unique_count": 8
+    },
+    "day_of_week": {
+      "min": 0.0,
+      "max": 4.0,
+      "mean": 1.9508,
+      "median": 2.0,
+      "std": 1.3966,
+      "unique_count": 5
+    },
+    "people_ahead": {
+      "min": 0.0,
+      "max": 22.0,
+      "mean": 1.3985,
+      "median": 1.0,
+      "std": 2.1313,
+      "unique_count": 23
+    },
+    "queue_length": {
+      "min": 1.0,
+      "max": 23.0,
+      "mean": 3.19,
+      "median": 2.0,
+      "std": 2.5171,
+      "unique_count": 23
+    },
+    "assigned_active_counters": {
+      "min": 1.0,
+      "max": 3.0,
+      "mean": 1.8524,
+      "median": 2.0,
+      "std": 0.3631,
+      "unique_count": 3
+    },
+    "busy_assigned_counters": {
+      "min": 1.0,
+      "max": 3.0,
+      "mean": 1.8513,
+      "median": 2.0,
+      "std": 0.3636,
+      "unique_count": 3
+    },
+    "max_elapsed_service_minutes": {
+      "min": 0.0008,
+      "max": 60.3287,
+      "mean": 9.2062,
+      "median": 8.0742,
+      "std": 5.9061,
+      "unique_count": 22808
+    },
+    "service_mean_minutes": {
+      "min": 7.0,
+      "max": 15.0,
+      "mean": 10.8239,
+      "median": 10.0,
+      "std": 2.9804,
+      "unique_count": 5
+    },
+    "service_std_minutes": {
+      "min": 2.8,
+      "max": 6.0,
+      "mean": 4.3295,
+      "median": 4.0,
+      "std": 1.1922,
+      "unique_count": 5
+    },
+    "arrival_rate_30m": {
+      "min": 0.0,
+      "max": 34.0,
+      "mean": 12.2577,
+      "median": 12.0,
+      "std": 4.797,
+      "unique_count": 18
+    },
+    "arrival_rate_60m": {
+      "min": 2.0,
+      "max": 28.0,
+      "mean": 10.7025,
+      "median": 10.0,
+      "std": 3.8673,
+      "unique_count": 27
+    },
+    "service_capacity_mu": {
+      "min": 4.2857,
+      "max": 18.0,
+      "mean": 10.908,
+      "median": 8.5714,
+      "std": 3.4727,
+      "unique_count": 9
+    },
+    "traffic_intensity": {
+      "min": 0.175,
+      "max": 3.7333,
+      "mean": 1.021,
+      "median": 1.0,
+      "std": 0.3559,
+      "unique_count": 88
+    }
+  },
+  "target": {
+    "count": 32802,
+    "min": 0.0,
+    "median": 7.0837,
+    "mean": 11.6538,
+    "p75": 15.1092,
+    "p90": 28.3102,
+    "p95": 38.9378,
+    "max": 138.3594,
+    "std": 13.3113,
+    "zero_wait_count": 1,
+    "zero_wait_pct": 0.0
+  },
+  "duplicates": {
+    "exact_feature_duplicates": 3,
+    "exact_feature_duplicates_pct": 0.01,
+    "unique_tokens_in_dataset": 20499,
+    "tokens_sampled_multiple_times_within_trajectory": 9439,
+    "near_duplicate_rows": 10920,
+    "near_duplicate_pct": 33.29
+  },
+  "censoring_breakdowns": {
+    "by_regime": {
+      "FAILURE": {
+        "total": 2120,
+        "censored": 0,
+        "censored_pct": 0.0
+      },
+      "HEALTHY": {
+        "total": 11525,
+        "censored": 0,
+        "censored_pct": 0.0
+      },
+      "HIGH_LOAD": {
+        "total": 5398,
+        "censored": 0,
+        "censored_pct": 0.0
+      },
+      "INTERVENTION": {
+        "total": 1933,
+        "censored": 0,
+        "censored_pct": 0.0
+      },
+      "MODERATE": {
+        "total": 8863,
+        "censored": 0,
+        "censored_pct": 0.0
+      },
+      "STRESSED": {
+        "total": 2963,
+        "censored": 0,
+        "censored_pct": 0.0
+      }
+    },
+    "by_office": {
+      "MUNI": {
+        "total": 23011,
+        "censored": 0,
+        "censored_pct": 0.0
+      },
+      "RTO": {
+        "total": 9791,
+        "censored": 0,
+        "censored_pct": 0.0
+      }
+    },
+    "by_obs_type": {
+      "JOIN": {
+        "total": 11917,
+        "censored": 0,
+        "censored_pct": 0.0
+      },
+      "PERIODIC": {
+        "total": 20885,
+        "censored": 0,
+        "censored_pct": 0.0
+      }
+    }
+  },
+  "join_vs_periodic": {
+    "JOIN": {
+      "count": 11917,
+      "target_mean": 13.949,
+      "target_median": 8.7434,
+      "target_p90": 33.856,
+      "mean_queue_position": 2.85,
+      "service_distribution": {
+        "PT": 3956,
+        "BC": 3078,
+        "WC": 1968,
+        "OT": 1694,
+        "DR": 1221
+      }
+    },
+    "PERIODIC": {
+      "count": 20885,
+      "target_mean": 10.3442,
+      "target_median": 6.2325,
+      "target_p90": 25.0,
+      "mean_queue_position": 2.14,
+      "service_distribution": {
+        "PT": 6971,
+        "OT": 4073,
+        "WC": 4064,
+        "BC": 2974,
+        "DR": 2803
+      }
+    }
+  },
+  "data_leakage_audit": {
+    "status": "PASS",
+    "verified_no_future_arrival_features": true,
+    "verified_no_future_failure_features": true,
+    "verified_no_future_intervention_features": true,
+    "verified_no_target_derived_input_features": true,
+    "strictly_15_raw_features": [
+      "office_id",
+      "service_id",
+      "hour",
+      "day_of_week",
+      "people_ahead",
+      "queue_length",
+      "assigned_active_counters",
+      "busy_assigned_counters",
+      "max_elapsed_service_minutes",
+      "service_mean_minutes",
+      "service_std_minutes",
+      "arrival_rate_30m",
+      "arrival_rate_60m",
+      "service_capacity_mu",
+      "traffic_intensity"
+    ]
+  },
+  "parquet_available": true,
+  "pyarrow_version": "23.0.1"
+}
