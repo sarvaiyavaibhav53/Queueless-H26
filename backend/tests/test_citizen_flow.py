@@ -5,6 +5,7 @@ from app.main import app
 from app.db.database import SessionLocal
 from app.models.office import Office
 from app.models.service import Service
+from app.models.counter import Counter, CounterService
 from app.models.token import QueueToken, TokenStatus
 from app.models.queue_counter import QueueCounter
 
@@ -14,12 +15,16 @@ client = TestClient(app, raise_server_exceptions=True)
 def db_session():
     db = SessionLocal()
     db.query(QueueToken).delete()
+    db.query(CounterService).delete()
+    db.query(Counter).delete()
     db.query(QueueCounter).delete()
     db.query(Service).delete()
     db.query(Office).delete()
     db.commit()
     yield db
     db.query(QueueToken).delete()
+    db.query(CounterService).delete()
+    db.query(Counter).delete()
     db.query(QueueCounter).delete()
     db.query(Service).delete()
     db.query(Office).delete()

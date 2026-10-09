@@ -338,28 +338,91 @@ class TestMLHybridServing(unittest.TestCase):
     # 6. INVALID RF OUTPUT HANDLING
     # =========================================================================
     def test_10_negative_rf_prediction_clipped_to_zero(self):
-        """Verify negative finite predictions from model are safely clipped to 0.0."""
+        """
+        Verify negative finite predictions from model are safely clipped to 0.0:
+        - Case A: Negative P50, P10, and P90 all clipped to 0.0, predict_wait_time returns 0.0.
+        - Case B: Only P10 negative, clipped to 0.0 while P50 and P90 remain valid positive.
+        - Case C: Point-only RF model prediction returns negative (quantiles absent), clipped to 0.0.
+        """
+        # Case A: Negative P50, P10, and P90 all clipped to 0.0
         with patch.object(prediction_service.q10_model, "predict", return_value=np.array([-10.0])), \
-             patch.object(prediction_service.q50_model, "predict", return_value=np.array([-5.2])):
+             patch.object(prediction_service.q50_model, "predict", return_value=np.array([-5.2])), \
+             patch.object(prediction_service.q90_model, "predict", return_value=np.array([-1.0])):
             res = prediction_service.predict(self.normal_state)
-        self.assertEqual(res.predicted_wait_minutes, 0.0)
-        self.assertEqual(res.p10_minutes, 0.0)
+            self.assertEqual(res.predicted_wait_minutes, 0.0)
+            self.assertEqual(res.p10_minutes, 0.0)
+            self.assertEqual(res.p90_minutes, 0.0)
+            self.assertEqual(res.prediction_source, PredictionSource.RF.value)
+            self.assertIsNone(res.fallback_reason)
+            self.assertEqual(prediction_service.predict_wait_time(self.normal_state), 0.0)
+
+        # Case B: Only P10 negative (P50 and P90 remain positive)
+        with patch.object(prediction_service.q10_model, "predict", return_value=np.array([-3.5])):
+            res_p10 = prediction_service.predict(self.normal_state)
+            self.assertEqual(res_p10.p10_minutes, 0.0)
+            self.assertGreater(res_p10.predicted_wait_minutes, 0.0)
+            self.assertGreaterEqual(res_p10.p90_minutes, res_p10.predicted_wait_minutes)
+            self.assertEqual(res_p10.prediction_source, PredictionSource.RF.value)
+            self.assertIsNone(res_p10.fallback_reason)
+
+        # Case C: Point-only RF model prediction returns negative (quantiles absent)
+        with patch.object(prediction_service, "q50_model", None), \
+             patch.object(prediction_service, "q10_model", None), \
+             patch.object(prediction_service, "q90_model", None), \
+             patch.object(prediction_service.rf_model, "predict", return_value=np.array([-8.2])):
+            res_pt = prediction_service.predict(self.normal_state)
+            self.assertEqual(res_pt.predicted_wait_minutes, 0.0)
+            self.assertEqual(res_pt.prediction_source, PredictionSource.RF.value)
+            self.assertIsNone(res_pt.fallback_reason)
+            self.assertEqual(prediction_service.predict_wait_time(self.normal_state), 0.0)
 
     def test_11_nan_and_infinite_rf_outputs_trigger_fallback(self):
-        """Verify NaN or +/-inf outputs do NOT get converted to 0, but trigger analytical fallback."""
-        # Test NaN
-        with patch.object(prediction_service.q50_model, "predict", return_value=np.array([math.nan])):
-            res_nan = prediction_service.predict(self.normal_state)
-        self.assertEqual(res_nan.prediction_source, PredictionSource.ANALYTICAL_FALLBACK.value)
-        self.assertEqual(res_nan.fallback_reason, FallbackReason.RF_NON_FINITE_OUTPUT.value)
-        self.assertTrue(math.isfinite(res_nan.predicted_wait_minutes))
+        """
+        Verify NaN or +/-inf outputs do NOT get converted to 0, but trigger analytical fallback:
+        - Evaluates NaN, +inf, and -inf across P50 and point-only RF models.
+        - Evaluates non-finite P10 and P90 quantiles.
+        - Verifies predict_wait_time returns finite analytical fallback.
+        """
+        for non_finite_val in [math.nan, math.inf, -math.inf]:
+            # P50 model produces non-finite
+            with patch.object(prediction_service.q50_model, "predict", return_value=np.array([non_finite_val])):
+                res = prediction_service.predict(self.normal_state)
+                self.assertEqual(res.prediction_source, PredictionSource.ANALYTICAL_FALLBACK.value)
+                self.assertEqual(res.fallback_reason, FallbackReason.RF_NON_FINITE_OUTPUT.value)
+                self.assertTrue(math.isfinite(res.predicted_wait_minutes))
+                self.assertGreaterEqual(res.predicted_wait_minutes, 0.0)
+                self.assertIsNone(res.p10_minutes)
+                self.assertIsNone(res.p90_minutes)
+                wait_time = prediction_service.predict_wait_time(self.normal_state)
+                self.assertTrue(math.isfinite(wait_time))
+                self.assertGreaterEqual(wait_time, 0.0)
 
-        # Test +Infinity
-        with patch.object(prediction_service.q50_model, "predict", return_value=np.array([math.inf])):
-            res_inf = prediction_service.predict(self.normal_state)
-        self.assertEqual(res_inf.prediction_source, PredictionSource.ANALYTICAL_FALLBACK.value)
-        self.assertEqual(res_inf.fallback_reason, FallbackReason.RF_NON_FINITE_OUTPUT.value)
-        self.assertTrue(math.isfinite(res_inf.predicted_wait_minutes))
+            # Point-only RF model produces non-finite (quantiles absent)
+            with patch.object(prediction_service, "q50_model", None), \
+                 patch.object(prediction_service, "q10_model", None), \
+                 patch.object(prediction_service, "q90_model", None), \
+                 patch.object(prediction_service.rf_model, "predict", return_value=np.array([non_finite_val])):
+                res_pt = prediction_service.predict(self.normal_state)
+                self.assertEqual(res_pt.prediction_source, PredictionSource.ANALYTICAL_FALLBACK.value)
+                self.assertEqual(res_pt.fallback_reason, FallbackReason.RF_NON_FINITE_OUTPUT.value)
+                self.assertTrue(math.isfinite(res_pt.predicted_wait_minutes))
+                self.assertGreaterEqual(res_pt.predicted_wait_minutes, 0.0)
+                self.assertGreaterEqual(prediction_service.predict_wait_time(self.normal_state), 0.0)
+
+        # Quantile non-finite output triggers fallback
+        with patch.object(prediction_service.q10_model, "predict", return_value=np.array([math.nan])):
+            res_q10 = prediction_service.predict(self.normal_state)
+            self.assertEqual(res_q10.prediction_source, PredictionSource.ANALYTICAL_FALLBACK.value)
+            self.assertEqual(res_q10.fallback_reason, FallbackReason.RF_NON_FINITE_OUTPUT.value)
+            self.assertTrue(math.isfinite(res_q10.predicted_wait_minutes))
+            self.assertGreaterEqual(res_q10.predicted_wait_minutes, 0.0)
+
+        with patch.object(prediction_service.q90_model, "predict", return_value=np.array([math.inf])):
+            res_q90 = prediction_service.predict(self.normal_state)
+            self.assertEqual(res_q90.prediction_source, PredictionSource.ANALYTICAL_FALLBACK.value)
+            self.assertEqual(res_q90.fallback_reason, FallbackReason.RF_NON_FINITE_OUTPUT.value)
+            self.assertTrue(math.isfinite(res_q90.predicted_wait_minutes))
+            self.assertGreaterEqual(res_q90.predicted_wait_minutes, 0.0)
 
     # =========================================================================
     # 7. MODEL UNAVAILABLE & CHECKSUM VERIFICATION

@@ -28,6 +28,7 @@ from app.services.queue_snapshot_service import (
 from app.services.prediction_service import IdentityValidationError
 from app.models.office import Office
 from app.models.service import Service
+from app.models.counter import Counter, CounterStatus
 from app.models.token import QueueToken, TokenStatus
 from app.models.user import User, UserRole
 from app.ws_manager import ws_manager
@@ -40,6 +41,7 @@ router = APIRouter(prefix="/api/v1/queues", tags=["queues"])
 def get_queue_status(office_id: int, service_id: int, db: Session = Depends(get_db), current_user: User = Depends(require_citizen)):
     """
     Citizen API to get current queue status before joining.
+    Reports waiting count and active counters assigned to the requested service.
     """
     office = db.query(Office).filter(Office.id == office_id).first()
     if not office:
@@ -54,10 +56,21 @@ def get_queue_status(office_id: int, service_id: int, db: Session = Depends(get_
         QueueToken.service_id == service_id,
         QueueToken.status == TokenStatus.WAITING
     ).count()
+
+    has_physical_counters = db.query(Counter).filter(Counter.office_id == office_id).first() is not None
+    if has_physical_counters:
+        active_counters = db.query(Counter).filter(
+            Counter.office_id == office_id,
+            Counter.assigned_service_id == service_id,
+            Counter.status == CounterStatus.ACTIVE,
+        ).count()
+    else:
+        # Fallback for offices without physical counter entity records (legacy test compatibility)
+        active_counters = office.counters
     
     return QueueStatusResponse(
         waiting_count=waiting_count,
-        active_counters=office.counters
+        active_counters=active_counters
     )
 
 @router.get("/{office_id}/{service_id}/tokens", response_model=list[TokenResponse])
@@ -93,46 +106,16 @@ def get_queue_tokens(office_id: int, service_id: int, db: Session = Depends(get_
 def join_queue(service_id: int, request: JoinQueueRequest, background_tasks: BackgroundTasks, db: Session = Depends(get_db), current_user: User = Depends(require_citizen)):
     """
     Citizen API to join a queue for a specific service at a specific office.
+    Authoritative live ETA is retrieved via GET /api/v1/queues/{token_id}/eta.
     """
     try:
         token = queue_service.generate_token(db, request.office_id, service_id)
         token.user_id = current_user.id
-        
         # Calculate position
         position = queue_service.get_queue_position(db, token.id)
-        
-        # ML prediction integration boundary (graceful degradation)
-        # We try to call prediction_service if it works, otherwise return None or default
-        predicted_wait = None
-        try:
-            from app.services.prediction_service import prediction_service
-            import math
-            office = db.query(Office).filter(Office.id == request.office_id).first()
-            service = db.query(Service).filter(Service.id == service_id).first()
-            if office and service:
-                pred_request = {
-                    "office_id": office.code,
-                    "service_id": service.code,
-                    "hour": datetime.datetime.now().hour,
-                    "day_of_week": datetime.datetime.now().weekday(),
-                    "people_ahead": position - 1,
-                    "queue_length": position,
-                    "active_counters": office.counters,
-                    "arrival_rate_15m": 5, # Mock value as actual historical rate is complex
-                    "counter_load": position / max(1, office.counters),
-                    "historical_avg_service_minutes": service.mean_minutes,
-                    "service_time_std": service.std_minutes or 0.0,
-                    "no_show_rate": 0.05
-                }
-                raw_pred = prediction_service.predict_wait_time(pred_request)
-                if raw_pred is not None and math.isfinite(raw_pred) and raw_pred >= 0:
-                    predicted_wait = int(round(raw_pred))
-        except Exception as e:
-            # Graceful degradation if ML is unavailable
-            # Log the exception in a real app, here we just pass
-            pass
-            
-        token.predicted_wait_minutes = predicted_wait
+        # Authoritative live ETA is retrieved via GET /api/v1/queues/{token_id}/eta
+        # adhering to canonical 15-feature contract. Ad-hoc mock prediction is omitted.
+        token.predicted_wait_minutes = None
         db.commit()
         db.refresh(token)
         

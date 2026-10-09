@@ -29,7 +29,7 @@ Observe (Snapshot/Features)
    - In live database execution (`POST /api/v1/interventions/apply`), the counter reassignment is **immediate** (`assigned_service_id` and `status_changed_at` are persisted immediately in an atomic transaction). The 3-minute delay is purely an evaluation look-ahead penalty.
 2. **Busy Counter Reassignment & Unavailability Safety:**
    - Applying a valid reassignment or marking a counter `UNAVAILABLE` succeeds even when the counter is currently serving an active token.
-   - The active token remains associated with its original service and counter, and can be completed normally through `/api/v1/queues/{token_id}/complete`.
+   - The active token remains associated with its original service and counter, and can be completed normally through `/api/v1/tokens/{token_id}/complete`.
    - The counter will not accept any new tokens while the current token is in progress.
    - Once the active token completes, subsequent calls strictly respect the new state: serving the new assigned service (or blocked if `UNAVAILABLE`).
 3. **Fluid Time-to-Congestion Metric:**
@@ -44,7 +44,7 @@ Observe (Snapshot/Features)
    - Clients treat these hints as triggers to refetch REST snapshots.
 5. **CORS Development Defaults:**
    - Out-of-the-box support for `http://localhost:3000`, `http://127.0.0.1:3000`, `http://localhost:5173`, `http://127.0.0.1:5173`, `http://localhost:8080`, `http://localhost:4173`.
-   - Override or extend via `CORS_ORIGINS` environment variable (comma-separated). Credentials (`allow_credentials=True`) are enabled. Wildcards and `Origin: null` are rejected.
+   - Override or extend via `CORS_ORIGINS` environment variable (comma-separated). Credentials (`allow_credentials=False`) are disabled by default. Wildcards and `Origin: null` are rejected.
 
 ---
 
@@ -467,7 +467,7 @@ All endpoints require `Employee` or `Admin` role, mutate token state, and emit `
 ### 5.6. Physical Counter Availability
 - **Mark Unavailable:** `POST /api/v1/counters/{counter_id}/unavailable`
   - Succeeds even if counter is currently serving an active token!
-  - In-progress token remains completable through `/api/v1/queues/{token_id}/complete`.
+  - In-progress token remains completable through `/api/v1/tokens/{token_id}/complete`.
   - Sets `status = UNAVAILABLE`. Excludes desk from `call-next`.
   - Emits single `counter.status_changed` invalidation.
 - **Recover Counter:** `POST /api/v1/counters/{counter_id}/recover`
